@@ -10,19 +10,21 @@ Renderer::Renderer() {
 	glMatrixMode(GL_MODELVIEW);
 	
 	glClearColor(1.0, 1.0, 1.0, 0.0); //default
+	
+	current_camera = NULL;
 }
 
 
 void Renderer::render() {
 	if(inrender_function != NULL) inrender_function();
+	if(current_camera == NULL) return;
 	
 	//clean the screen
-	//glClearColor(1.0, 1.0, 1.0, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	
 	//orient camera
 	glLoadIdentity();
-	gluLookAt(0.0, 0.0, 15.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+	current_camera->camera_glulookat();
 	
 	//draw things
 	glColor3f(1.0, 0.0, 0.0);
@@ -34,11 +36,14 @@ void Renderer::render() {
 }
 
 
-
 void Renderer::set_inrender_function(void (*foo) ()) {
 	inrender_function = foo;
 }
 
 void Renderer::set_clear_color(float r, float g, float b, float a) {
 	glClearColor(r, g, b, a);
+}
+
+void Renderer::set_current_camera(Camera *ptr) {
+	current_camera = ptr;
 }

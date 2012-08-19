@@ -13,5 +13,5 @@ using namespace std;
 //proch3d engine
 #include "Core.h"
 #include "Window.h"
-#include "Renderer.h"
 #include "Camera.h"
+#include "Renderer.h"
