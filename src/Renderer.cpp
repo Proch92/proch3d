@@ -2,6 +2,7 @@
 
 Renderer::Renderer() {
 	inrender_function = NULL;
+	draw_scene = NULL;
 	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -27,9 +28,8 @@ void Renderer::render() {
 	current_camera->camera_glulookat();
 	
 	//draw things
-	glColor3f(1.0, 0.0, 0.0);
-	 
-	glutWireCube(5.0); // Box.
+	if(draw_scene != NULL)
+		draw_scene();
 	
 	//update screen
 	glFlush();
@@ -38,6 +38,10 @@ void Renderer::render() {
 
 void Renderer::set_inrender_function(void (*foo) ()) {
 	inrender_function = foo;
+}
+
+void Renderer::set_draw_scene_function(void (*foo) ()) {
+	draw_scene = foo;
 }
 
 void Renderer::set_clear_color(float r, float g, float b, float a) {
