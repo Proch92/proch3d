@@ -13,3 +13,13 @@ class Matrix4f {
 	private:
 		float data[16];
 };
+
+class Vector3f {
+	public:
+		Vector3f();
+		float x;
+		float y;
+		float z;
+	private:
+		
+};

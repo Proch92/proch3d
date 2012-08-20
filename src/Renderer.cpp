@@ -31,6 +31,7 @@ void Renderer::render() {
 	if(draw_scene != NULL)
 		draw_scene();
 	
+	
 	//update screen
 	glFlush();
 }

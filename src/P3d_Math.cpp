@@ -32,3 +32,11 @@ float& Matrix4f::operator [] (int index) {
 float* Matrix4f::get_data() {
 	return data;
 }
+
+
+// Vector3f ------------------------------------------------------------------------------------------
+Vector3f::Vector3f() {
+	x=0;
+	y=0;
+	z=0;
+}
