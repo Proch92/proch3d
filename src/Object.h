@@ -3,6 +3,8 @@ class Object : public Entity {
 		Object();
 		
 		void render();
+		
+		Color4f color;
 	protected:
 		bool hidden;
 };

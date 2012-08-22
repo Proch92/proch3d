@@ -23,3 +23,14 @@ class Vector3f {
 	private:
 		
 };
+
+class Color4f {
+	public:
+		Color4f();
+		float r;
+		float g;
+		float b;
+		float a;
+	private:
+		
+};

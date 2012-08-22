@@ -13,6 +13,10 @@ Renderer::Renderer() {
 	glClearColor(1.0, 1.0, 1.0, 0.0); //default
 	
 	current_camera = NULL;
+	
+	fps_timer.start();
+	fps = 0;
+	max_fps = 0;
 }
 
 
@@ -34,6 +38,16 @@ void Renderer::render() {
 	
 	//update screen
 	glFlush();
+	
+	if(max_fps != 0 && fps_timer.get_elapsed_last_call() <= (1000/max_fps)) {
+		p3d_delay(1000/max_fps);
+	}
+	if(fps_timer.get_tick() >= 1000) {
+		printf("fps = %d\n", fps);
+		fps = 0;
+		fps_timer.start();
+	}
+	else fps++;
 }
 
 
@@ -51,4 +65,8 @@ void Renderer::set_clear_color(float r, float g, float b, float a) {
 
 void Renderer::set_current_camera(Camera *ptr) {
 	current_camera = ptr;
+}
+
+void Renderer::set_max_fps(int mfps) {
+	max_fps = mfps;
 }

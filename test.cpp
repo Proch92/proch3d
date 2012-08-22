@@ -1,5 +1,4 @@
 #include "src/proch3d.h"
-#include "stdio.h"
 
 void draw_scene();
 
@@ -13,19 +12,16 @@ int main(int argc, char **argv) {
 	
 	Renderer renderer;
 	renderer.set_draw_scene_function(draw_scene);
+	renderer.set_max_fps(60);
 	
 	Camera camera0;
 	renderer.set_current_camera(&camera0);
-	
-	//camera0.translate(0.0, 0.0, 15.0);
 	
 	cube.translate(-2.5, 0.0, -15.0);
 	cube2.translate(2.5, 0.0, -15.0);
 	
 	int i;
-	for(i=0; i!=1000; i++) {
-		system("sleep 0.01");
-		
+	for(i=0; i!=300; i++) {
 		cube.translate(0.0, 0.05, 0.0);
 		cube.rotate(0.0, 0.5, 0.0);
 		
