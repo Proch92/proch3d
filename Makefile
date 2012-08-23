@@ -1,6 +1,6 @@
-exe: ogre test
-	g++ -o exe test.o Core.o Window.o Renderer.o Camera.o P3d_Math.o Entity.o Object.o Timer.o utils.o -lGL -lGLU -lglut
+exe: p3d test
+	g++ -o exe test.o P3d_Window.o P3d_Renderer.o P3d_Camera.o P3d_Math.o P3d_Entity.o P3d_Object.o P3d_Timer.o utils.o P3d_InputManager.o -lGL -lGLU -lsfml-graphics -lsfml-window -lsfml-system
 test: test.cpp
 	g++ -c test.cpp
-ogre: src/Core.cpp src/Window.cpp src/Renderer.cpp src/Camera.cpp src/P3d_Math.cpp src/Entity.cpp src/Object.cpp src/Timer.cpp src/utils.cpp
-	g++ -c src/Core.cpp src/Window.cpp src/Renderer.cpp src/Camera.cpp src/P3d_Math.cpp src/Entity.cpp src/Object.cpp src/Timer.cpp src/utils.cpp
+p3d: src/P3d_Window.cpp src/P3d_Renderer.cpp src/P3d_Camera.cpp src/P3d_Math.cpp src/P3d_Entity.cpp src/P3d_Object.cpp src/P3d_Timer.cpp src/utils.cpp src/P3d_InputManager.cpp
+	g++ -c src/P3d_Window.cpp src/P3d_Renderer.cpp src/P3d_Camera.cpp src/P3d_Math.cpp src/P3d_Entity.cpp src/P3d_Object.cpp src/P3d_Timer.cpp src/utils.cpp src/P3d_InputManager.cpp

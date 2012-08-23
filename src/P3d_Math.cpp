@@ -1,14 +1,14 @@
 #include "proch3d.h"
 
-Matrix4f::Matrix4f() {
+P3d_Matrix4f::P3d_Matrix4f() {
 	int i;
 	for(i=0; i!=16; i++)
 		if(i % 5) data[i] = 0;
 		else data[i] = 1;
 }
 
-Matrix4f Matrix4f::operator * (Matrix4f &m) { //NOT TESTED
-	Matrix4f result;
+P3d_Matrix4f P3d_Matrix4f::operator * (P3d_Matrix4f &m) { //NOT TESTED
+	P3d_Matrix4f result;
 	
 	int i, j;
 	
@@ -19,32 +19,46 @@ Matrix4f Matrix4f::operator * (Matrix4f &m) { //NOT TESTED
 	return result;
 }
 
-void Matrix4f::operator = (const Matrix4f &m) {
+void P3d_Matrix4f::operator = (const P3d_Matrix4f &m) {
 	int i;
 	for(i=0; i!=16; i++)
-		data[i] = ((Matrix4f)m)[i];
+		data[i] = ((P3d_Matrix4f)m)[i];
 }
 
-float& Matrix4f::operator [] (int index) {
+float& P3d_Matrix4f::operator [] (int index) {
 	return data[index];
 }
 
-float* Matrix4f::get_data() {
+float* P3d_Matrix4f::get_data() {
 	return data;
 }
 
 
 // Vector3f ------------------------------------------------------------------------------------------
-Vector3f::Vector3f() {
+P3d_Vector3f::P3d_Vector3f() {
 	x=0;
 	y=0;
 	z=0;
 }
 
 // Color4f ------------------------------------------------------------------------------------------
-Color4f::Color4f() {
+P3d_Color4f::P3d_Color4f() {
 	r=0;
 	g=0;
 	b=0;
 	a=0;
 }
+
+P3d_Color4f::P3d_Color4f(float R, float G, float B, float A) {
+	r=R;
+	g=G;
+	b=B;
+	a=A;
+}
+
+void P3d_Color4f::operator = (const P3d_Color4f &new_color) {
+	r = new_color.r;
+	g = new_color.g;
+	b = new_color.b;
+	a = new_color.a;
+};
