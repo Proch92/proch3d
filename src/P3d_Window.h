@@ -13,15 +13,16 @@ class P3d_Window {
 		void create();
 		void resize();
 		
-		sf::Window sf_window;
-	private:
+		//sf::Window sf_window;
+		sf::RenderWindow sf_window;
 		int width, height;
+	private:
 		string window_name;
 		bool created;
 };
 
-#define DEFAULT_SCREEN_WIDTH 800
-#define DEFAULT_SCREEN_HEIGHT 600
+#define DEFAULT_SCREEN_WIDTH 1024
+#define DEFAULT_SCREEN_HEIGHT 768
 #define DEFAULT_WINDOW_NAME "proch3d"
 #define DEFAULT_WINDOW_X_POS 100
 #define DEFAULT_WINDOW_Y_POS 100

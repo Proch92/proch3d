@@ -18,6 +18,8 @@ P3d_Renderer::P3d_Renderer() {
 	fps_timer.start();
 	fps = 0;
 	max_fps = 0;
+	
+	showing_axis = false;
 }
 
 
@@ -31,6 +33,13 @@ void P3d_Renderer::render() {
 	//orient camera
 	glLoadIdentity();
 	current_camera->camera_glulookat();
+	
+	//show axis for debug
+	if(showing_axis)
+		show_axis();
+	
+	//draw text
+	show_debug_text(string("test"), 10, 10);
 	
 	//draw things
 	if(draw_scene != NULL)
@@ -73,6 +82,44 @@ void P3d_Renderer::set_max_fps(int mfps) {
 	max_fps = mfps;
 }
 
-void P3d_Renderer::set_current_window(sf::Window* w) {
+/*void P3d_Renderer::set_current_window(sf::Window* w) {
 	current_window = w;
+}*/
+
+void P3d_Renderer::set_current_window(sf::RenderWindow* w) {
+	current_window = w;
+}
+
+void P3d_Renderer::show_xyz_axis(bool value) {
+	showing_axis = value;
+}
+
+void P3d_Renderer::show_axis() {
+	glColor4f(1.0, 0.0, 0.0, 0.0);
+	glBegin(GL_LINE);
+		glVertex3f(-10.0, 0.0, 0.0);
+		glVertex3f(10.0, 0.0, 0.0);
+	glEnd();
+	
+	glColor4f(0.0, 1.0, 0.0, 0.0);
+	glBegin(GL_LINE);
+		glVertex3f(0.0, 0.0, -10.0);
+		glVertex3f(0.0, 0.0, 10.0);
+	glEnd();
+	
+	glColor4f(0.0, 0.0, 1.0, 0.0);
+	glBegin(GL_LINE);
+		glVertex3f(0.0, -10.0, 0.0);
+		glVertex3f(0.0, 10.0, 0.0);
+	glEnd();
+}
+
+void P3d_Renderer::show_debug_text(string message, int x, int y) {
+	sf::String msg;
+	msg.SetText(message.c_str());
+	msg.SetFont(sf::Font::GetDefaultFont());
+	msg.SetSize(DEBUG_TEXT_SIZE);
+	msg.Move((float) x, (float) y);
+	msg.SetColor(sf::Color(128, 128, 128));
+	current_window->Draw(msg);
 }

@@ -19,6 +19,19 @@ P3d_Matrix4f P3d_Matrix4f::operator * (P3d_Matrix4f &m) { //NOT TESTED
 	return result;
 }
 
+P3d_Vector4f P3d_Matrix4f::operator * (const P3d_Vector4f &v4f) {
+	P3d_Vector4f result;
+	
+	int i, j;
+	for(i=0; i!=4; i++) {
+		for(j=0; j!=4; j++) {
+			result[i] += v4f.data[j] * data[(i*4) + j];
+		}
+	}
+	
+	return result;
+}
+
 void P3d_Matrix4f::operator = (const P3d_Matrix4f &m) {
 	int i;
 	for(i=0; i!=16; i++)
@@ -33,12 +46,129 @@ float* P3d_Matrix4f::get_data() {
 	return data;
 }
 
+void P3d_Matrix4f::show() {
+	printf("%f ", data[0]);
+	printf("%f ", data[4]);
+	printf("%f ", data[8]);
+	printf("%f ", data[12]);
+	printf("\n");
+	printf("%f ", data[1]);
+	printf("%f ", data[5]);
+	printf("%f ", data[9]);
+	printf("%f ", data[13]);
+	printf("\n");
+	printf("%f ", data[2]);
+	printf("%f ", data[6]);
+	printf("%f ", data[10]);
+	printf("%f ", data[14]);
+	printf("\n");
+	printf("%f ", data[3]);
+	printf("%f ", data[7]);
+	printf("%f ", data[11]);
+	printf("%f ", data[15]);
+	printf("\n");
+}
+
+// P3d_Vector4f ------------------------------------------------------------------------------------------
+P3d_Vector4f::P3d_Vector4f() {
+	data[0] = 0;
+	data[1] = 0;
+	data[2] = 0;
+	data[3] = 1;
+}
+
+P3d_Vector4f::P3d_Vector4f(float d0, float d1, float d2, float d3) {
+	data[0] = d0;
+	data[1] = d1;
+	data[2] = d2;
+	data[3] = d3;
+}
+
+void P3d_Vector4f::normalize() {
+	float magnitude = get_magnitude();
+	data[0] /= magnitude;
+	data[1] /= magnitude;
+	data[2] /= magnitude;
+	data[3] /= magnitude;
+}
+
+float P3d_Vector4f::get_magnitude() {
+	return sqrtf((data[0] * data[0]) + (data[1] * data[1]) + (data[2] * data[2]) + (data[3] * data[3]));
+}
+
+void P3d_Vector4f::operator = (const P3d_Vector4f& v) {
+	data[0] = v.data[0];
+	data[1] = v.data[1];
+	data[2] = v.data[2];
+	data[3] = v.data[3];
+}
+
+P3d_Vector4f P3d_Vector4f::operator * (const P3d_Vector4f& v) {
+	P3d_Vector4f result;
+	
+	result.data[0] = data[0] * v.data[0];
+	result.data[1] = data[1] * v.data[1];
+	result.data[2] = data[2] * v.data[2];
+	result.data[3] = data[3] * v.data[3];
+	
+	return result;
+}
+
+void P3d_Vector4f::operator += (const P3d_Vector4f& v) {
+	data[0] += v.data[0];
+	data[1] += v.data[1];
+	data[2] += v.data[2];
+	data[3] += v.data[3];
+}
+
+float& P3d_Vector4f::operator [] (int index) {
+	return data[index];
+}
 
 // Vector3f ------------------------------------------------------------------------------------------
 P3d_Vector3f::P3d_Vector3f() {
 	x=0;
 	y=0;
 	z=0;
+}
+
+P3d_Vector3f::P3d_Vector3f(float X, float Y, float Z) {
+	x=X;
+	y=Y;
+	z=Z;
+}
+
+void P3d_Vector3f::normalize() {
+	float magnitude = get_magnitude();
+	x /= magnitude;
+	y /= magnitude;
+	z /= magnitude;
+}
+
+float P3d_Vector3f::get_magnitude() {
+	return sqrtf((x * x) + (y * y) + (z * z));
+}
+
+void P3d_Vector3f::operator = (const P3d_Vector3f& v) {
+	x = v.x;
+	y = v.y;
+	z = v.z;
+}
+
+P3d_Vector3f P3d_Vector3f::operator * (const P3d_Vector3f& v) {
+	P3d_Vector3f result;
+	
+	result.x = x * v.x;
+	result.y = y * v.y;
+	result.z = z * v.z;
+	
+	return result;
+}
+
+void P3d_Vector3f::operator += (const P3d_Vector3f& v) {
+	x += v.x;
+	y += v.y;
+	z += v.z;
 }
 
 // Color4f ------------------------------------------------------------------------------------------
