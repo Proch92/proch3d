@@ -4,6 +4,7 @@ void draw_scene();
 
 P3d_Object cube;
 P3d_Object cube2;
+P3d_Object base;
 
 bool running = true;
 
@@ -24,6 +25,8 @@ int main(int argc, char **argv) {
 	
 	cube.translate(-2.5, 0.0, -15.0);
 	cube2.translate(2.5, 0.0, -15.0);
+	base.translate(0, -10, 0);
+	base.rotate(90, 0, 0);
 	
 	cube2.set_color(P3d_Color4f(0.5, 0.5, 1.0, 0.0));
 	
@@ -64,13 +67,13 @@ int main(int argc, char **argv) {
 			camera0.move(P3d_Vector3f(0.0, 0.0, 1.0));
 		
 		//debug
-		P3d_Vector4f &orient = camera0.get_orient();
+		/*P3d_Vector4f &orient = camera0.get_orient();
 		stringstream orientx;
 		orientx << orient[0];
 		stringstream orienty;
 		orienty << orient[1];
 		stringstream orientz;
-		orientz << orient[2];
+		orientz << orient[2];*/
 		//renderer.show_debug_text(string("orient: ") + orientx.str() + string(" ") + orienty.str() + string(" ") + orientz.str(), 10, 10);
 	}
 }
@@ -78,4 +81,5 @@ int main(int argc, char **argv) {
 void draw_scene() {
 	cube.render();
 	cube2.render();
+	base.render();
 }

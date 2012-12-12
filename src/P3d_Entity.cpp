@@ -15,8 +15,8 @@ void P3d_Entity::rotate(float A, float B, float C) {
 	
 	if(orientation.x + A >= 180)
 		A = 180 - orientation.x;
-	if(orientation.x + A <= -180)
-		A = -180 - orientation.x;
+	/*if(orientation.x + A <= -180)
+		A = -180 - orientation.x;*/
 	orientation.x += A;
 	
 	orientation.y += B;
@@ -40,15 +40,15 @@ void P3d_Entity::rotate(float A, float B, float C) {
 	
 	P3d_Matrix4f matrix;
 	glGetFloatv(GL_MODELVIEW_MATRIX, matrix.get_data());
-	matrix.show();
+	//matrix.show();
 	orient = matrix * orient;
 	
 	glPopMatrix();
 	
-	printf("orient: %f, %f, %f\n", orient[0], orient[1], orient[2]);
+	//printf("orient: %f, %f, %f\n", orient[0], orient[1], orient[2]);
 }
 
-void P3d_Entity::move(const P3d_Vector3f& movement) {
+void P3d_Entity::moveOriented(const P3d_Vector3f& movement) {
 	//position += orient * movement;
 	
 	//z movement
@@ -58,6 +58,15 @@ void P3d_Entity::move(const P3d_Vector3f& movement) {
 	//x movement
 	position.x += (1 - orient[0]) * movement.x;
 	position.z += (1 - orient[2]) * movement.x;
+}
+
+void P3d_Entity::move(const P3d_Vector3f& movement) {
+	//position += orient * movement;
+	
+	//z movement
+	position.x += movement.x;
+	position.y += movement.y;
+	position.z += movement.z;
 }
 
 P3d_Vector4f& P3d_Entity::get_orient() {
