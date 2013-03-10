@@ -82,10 +82,6 @@ void P3d_Renderer::set_max_fps(int mfps) {
 	max_fps = mfps;
 }
 
-/*void P3d_Renderer::set_current_window(sf::Window* w) {
-	current_window = w;
-}*/
-
 void P3d_Renderer::set_current_window(sf::RenderWindow* w) {
 	current_window = w;
 }

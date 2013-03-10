@@ -127,9 +127,9 @@ float& P3d_Vector4f::operator [] (int index) {
 
 // Vector3f ------------------------------------------------------------------------------------------
 P3d_Vector3f::P3d_Vector3f() {
-	x=0;
-	y=0;
-	z=0;
+	x = 0;
+	y = 0;
+	z = 1;
 }
 
 P3d_Vector3f::P3d_Vector3f(float X, float Y, float Z) {

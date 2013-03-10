@@ -15,7 +15,6 @@ void P3d_Object::render() {
 	glRotatef(orientation.x, 1.0, 0.0, 0.0); //this happen first
 	
 	glColor3f(color.r, color.g, color.b);
-	//glutWireCube(5.0); //Box
 	glBegin(GL_LINE_LOOP);
 		glVertex3f(-2.5, -2.5, 0);
 		glVertex3f(-2.5, 2.5, 0);
