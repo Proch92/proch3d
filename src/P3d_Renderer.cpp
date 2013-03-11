@@ -4,12 +4,6 @@ P3d_Renderer::P3d_Renderer() {
 	inrender_function = NULL;
 	draw_scene = NULL;
 	
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glFrustum(-5.0, 5.0, -5.0, 5.0, 5.0, 100.0);
-	
-	glMatrixMode(GL_MODELVIEW);
-	
 	glClearColor(1.0, 1.0, 1.0, 0.0); //default
 	
 	current_camera = NULL;

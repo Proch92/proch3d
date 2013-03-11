@@ -28,3 +28,11 @@ void P3d_Entity::rotate(float A, float B, float C) {
 	if(orientation.z >= 360) orientation.z -= 360;
 	if(orientation.z < 0) orientation.z += 360;
 }
+
+P3d_Vector3f P3d_Entity::get_position() {
+	return position;
+}
+
+P3d_Vector3f P3d_Entity::get_orientation() {
+	return orientation;
+}
