@@ -3,9 +3,11 @@
 class P3d_Renderer {
 	public:
 		P3d_Renderer();
-		void render();
+		void clear_screen();
+		void update_screen();
+		void check_fps();
+		void glLoadIdentity();
 		void set_inrender_function(void (*foo) ());
-		void set_draw_scene_function(void (*foo) ());
 		void set_clear_color(float, float, float, float);
 		void set_max_fps(int);
 		void set_current_camera(P3d_Camera*);
@@ -14,7 +16,6 @@ class P3d_Renderer {
 		void show_debug_text(string, int, int);
 	private:
 		void (*inrender_function) ();
-		void (*draw_scene) ();
 		
 		void show_axis();
 		

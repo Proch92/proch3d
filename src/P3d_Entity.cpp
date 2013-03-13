@@ -15,6 +15,10 @@ void P3d_Entity::translate(const P3d_Vector3f& movement) {
 	position.z += movement.z;
 }
 
+void P3d_Entity::set_position(P3d_Vector3f newpos) {
+	position = newpos;
+}
+
 void P3d_Entity::rotate(float A, float B, float C) {
 	orientation.x += A;
 	if(orientation.x >= 360) orientation.x -= 360;

@@ -16,34 +16,24 @@ P3d_Renderer::P3d_Renderer() {
 	showing_axis = false;
 }
 
-
-void P3d_Renderer::render() {
-	if(inrender_function != NULL) inrender_function();
-	if(current_camera == NULL) return;
-	
-	//clean the screen
-	glClear(GL_COLOR_BUFFER_BIT);
-	
-	//orient camera
+void P3d_Renderer::glLoadIdentity() {
 	glLoadIdentity();
-	current_camera->camera_glulookat();
-	
-	//show axis for debug
-	if(showing_axis)
-		show_axis();
-	
-	//draw text
-	//show_debug_text(string("test"), 10, 10);
-	
-	//draw things
-	if(draw_scene != NULL)
-		draw_scene();
-	
+}
+
+void P3d_Renderer::clear_screen() {
+	glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void P3d_Renderer::update_screen() {
+	if(current_camera == NULL) return;
+
 	//update screen
 	if(current_window != NULL)
 		current_window->Display();
 	
-	//fps
+}
+
+void P3d_Renderer::check_fps() {
 	if(max_fps != 0 && fps_timer.get_elapsed_last_call() <= (1000/max_fps)) {
 		p3d_delay(1000/max_fps);
 	}
@@ -55,13 +45,8 @@ void P3d_Renderer::render() {
 	else fps++;
 }
 
-
 void P3d_Renderer::set_inrender_function(void (*foo) ()) {
 	inrender_function = foo;
-}
-
-void P3d_Renderer::set_draw_scene_function(void (*foo) ()) {
-	draw_scene = foo;
 }
 
 void P3d_Renderer::set_clear_color(float r, float g, float b, float a) {

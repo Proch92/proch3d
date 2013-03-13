@@ -16,10 +16,10 @@ void P3d_Object::render() {
 	
 	glColor3f(color.r, color.g, color.b);
 	glBegin(GL_LINE_LOOP);
-		glVertex3f(-2.5, -2.5, 0);
-		glVertex3f(-2.5, 2.5, 0);
-		glVertex3f(2.5, 2.5, 0);
-		glVertex3f(2.5, -2.5, 0);
+		glVertex3f(-2.5, 0, -2.5);
+		glVertex3f(-2.5, 0, 2.5);
+		glVertex3f(2.5, 0, 2.5);
+		glVertex3f(2.5, 0, -2.5);
 	glEnd();
 	
 	glPopMatrix();
