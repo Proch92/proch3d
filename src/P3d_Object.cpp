@@ -2,12 +2,13 @@
 
 P3d_Object::P3d_Object() {
 	hidden = false;
+	mesh = NULL;
 }
 
 void P3d_Object::render() {
 	if(hidden) return;
 	
-	glPushMatrix();
+	/*glPushMatrix();
 	
 	glTranslatef(position.x, position.y, position.z);
 	glRotatef(orientation.z, 0.0, 0.0, 1.0); //this happen third
@@ -22,9 +23,16 @@ void P3d_Object::render() {
 		glVertex3f(2.5, 0, -2.5);
 	glEnd();
 	
-	glPopMatrix();
+	glPopMatrix();*/
+
+	if(mesh != NULL)
+		mesh->render();
 }
 
 void P3d_Object::set_color(const P3d_Color4f& new_color) {
 	color = new_color;
+}
+
+void P3d_Object::set_mesh(P3d_Mesh* m) {
+	mesh = m;
 }

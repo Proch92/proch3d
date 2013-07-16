@@ -1,5 +1,20 @@
 const float DEG2RAD = 0.017453294; //3.141593 / 180
 
+class P3d_Vector2f {
+	public:
+		P3d_Vector2f();
+		P3d_Vector2f(float, float);
+		void operator = (const P3d_Vector2f&);
+		P3d_Vector2f operator * (const P3d_Vector2f&);
+		void operator += (const P3d_Vector2f&);
+		void normalize();
+		float get_magnitude();
+		float x;
+		float y;
+	private:
+		
+};
+
 class P3d_Vector3f {
 	public:
 		P3d_Vector3f();

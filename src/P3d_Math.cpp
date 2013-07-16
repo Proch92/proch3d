@@ -125,6 +125,46 @@ float& P3d_Vector4f::operator [] (int index) {
 	return data[index];
 }
 
+// Vector2f ------------------------------------------------------------------------------------------
+P3d_Vector2f::P3d_Vector2f() {
+	x = 0;
+	y = 0;
+}
+
+P3d_Vector2f::P3d_Vector2f(float X, float Y) {
+	x=X;
+	y=Y;
+}
+
+void P3d_Vector2f::normalize() {
+	float magnitude = get_magnitude();
+	x /= magnitude;
+	y /= magnitude;
+}
+
+float P3d_Vector2f::get_magnitude() {
+	return sqrtf((x * x) + (y * y));
+}
+
+void P3d_Vector2f::operator = (const P3d_Vector2f& v) {
+	x = v.x;
+	y = v.y;
+}
+
+P3d_Vector2f P3d_Vector2f::operator * (const P3d_Vector2f& v) {
+	P3d_Vector2f result;
+	
+	result.x = x * v.x;
+	result.y = y * v.y;
+	
+	return result;
+}
+
+void P3d_Vector2f::operator += (const P3d_Vector2f& v) {
+	x += v.x;
+	y += v.y;
+}
+
 // Vector3f ------------------------------------------------------------------------------------------
 P3d_Vector3f::P3d_Vector3f() {
 	x = 0;

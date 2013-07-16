@@ -23,6 +23,8 @@ using namespace std;
 #include "P3d_Timer.h"
 #include "P3d_Math.h"
 #include "P3d_Entity.h"
+#include "P3d_Vertex.h"
+#include "P3d_Mesh.h"
 #include "P3d_Object.h"
 #include "P3d_Window.h"
 #include "P3d_Camera.h"

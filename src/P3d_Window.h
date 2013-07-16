@@ -21,7 +21,7 @@ class P3d_Window {
 		bool created;
 };
 
-#define DEFAULT_SCREEN_WIDTH 1024
+#define DEFAULT_SCREEN_WIDTH 1366
 #define DEFAULT_SCREEN_HEIGHT 768
 #define DEFAULT_WINDOW_NAME "proch3d"
 #define DEFAULT_WINDOW_X_POS 100

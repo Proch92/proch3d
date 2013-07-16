@@ -2,7 +2,6 @@
 
 P3d_Renderer::P3d_Renderer() {
 	inrender_function = NULL;
-	draw_scene = NULL;
 	
 	glClearColor(1.0, 1.0, 1.0, 0.0); //default
 	
