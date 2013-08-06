@@ -12,20 +12,16 @@ P3d_Object::P3d_Object() {
 	num_indices = 0;	
 }
 
-void P3d_Object::render(glm::mat4 &proj) {
+void P3d_Object::render(glm::mat4 &proj, glm::mat4 view) {
 	if(hidden) return;
 
-	if(modelChanged) {
-		modelMatrix = glm::translate(glm::mat4(1.0), position) * glm::mat4_cast(rotation);
-
-		modelChanged = false;
-	}
+	update_model_matrix();
 	
 	GLint uniProj = glGetUniformLocation(shader_program, "proj");
 	glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(proj));
 
-	/*GLint uniView = glGetUniformLocation(shader_program, "view");
-	glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));*/
+	GLint uniView = glGetUniformLocation(shader_program, "view");
+	glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));
 
 	GLint uniModel = glGetUniformLocation(shader_program, "model");
 	glUniformMatrix4fv(uniModel, 1, GL_FALSE, glm::value_ptr(modelMatrix));
@@ -161,7 +157,66 @@ void P3d_Object::load_tetrahedron() {
 		1.0, 0.0, 0.0, 1.0,
 		0.0, 1.0, 0.0, 1.0,
 		1.0, 0.0, 1.0, 1.0,
-		1.0, 1.0, 1.0, 1.0
+		0.0, 0.0, 0.0, 1.0
+	};
+
+	//creating gpu memory buffers
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+
+	glGenBuffers(1, &vb);
+	glBindBuffer(GL_ARRAY_BUFFER, vb);
+	glBufferData(GL_ARRAY_BUFFER, num_vertices * 3 * sizeof(float), vertices, GL_STATIC_DRAW);
+
+	glGenBuffers(1, &ib);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, num_indices * 2 * sizeof(int), indices, GL_STATIC_DRAW);
+
+	glGenBuffers(1, &cb);
+	glBindBuffer(GL_ARRAY_BUFFER, cb);
+	glBufferData(GL_ARRAY_BUFFER, num_vertices * 4 * sizeof(float), colors, GL_STATIC_DRAW);
+}
+
+void P3d_Object::load_doublepiramid() {
+	num_vertices = 6;
+	vertices = new float[18] {
+		-0.5, -0.5, 0.0,
+		-0.5, 0.5, 0.0,
+		0.5, 0.5, 0.0,
+		0.5, -0.5, 0.0,
+		0.0, 0.0, 1.6,
+		0.0, 0.0, -1.6
+	};
+
+	texcoords = new float[24] {
+		0, 0,
+		0.5, sqrtf(3)/2,
+		1.0, 0.0
+	};
+	int i;
+	for(i=2; i!=5; i++)
+		memcpy(&(texcoords[i*6]), texcoords, 6*sizeof(float));
+
+	indices = new int[24] {
+		0, 4, 3,
+		3, 4, 2,
+		2, 4, 1,
+		1, 4, 0,
+
+		0, 3, 5,
+		3, 2, 5,
+		2, 1, 5,
+		1, 0, 5
+	};
+	num_indices = 24;
+
+	colors = new float[24] {
+		1.0, 0.0, 0.0, 1.0,
+		0.0, 1.0, 0.0, 1.0,
+		1.0, 0.0, 1.0, 1.0,
+		1.0, 0.0, 1.0, 1.0,
+		0.0, 0.0, 0.0, 1.0,
+		0.0, 0.0, 0.0, 1.0,
 	};
 
 	//creating gpu memory buffers

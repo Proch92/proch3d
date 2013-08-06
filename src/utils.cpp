@@ -44,7 +44,7 @@ void load_shader(const char* filename, GLuint shd) {
 	if(buffer[0] != '\0') printf("%s\n", buffer);
 }
 
-void print_mat4(glm::mat4 &mat) {
+void print_mat4(const glm::mat4 &mat) {
 	int i;
 	for(i=0; i!=4; i++) {
 		printf("%f,  %f,  %f,  %f\n", mat[i][0], mat[i][1], mat[i][2], mat[i][3]);

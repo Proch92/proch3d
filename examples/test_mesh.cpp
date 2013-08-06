@@ -13,8 +13,18 @@ P3d_Mesh *mesh;
 
 bool running = true;
 
+struct keymap {
+	bool w,s,a,d;
+} kmap;
+bool lbool;
+glm::vec2 mousePos;
+
 int main(int argc, char **argv) {
 	printf("start\n");
+
+	kmap.w = kmap.s = kmap.a = kmap.d = false;
+	lbool = false;
+	mousePos = glm::vec2(DEFAULT_SCREEN_WIDTH/2.0, DEFAULT_SCREEN_HEIGHT/2.0);
 
 	P3d_Window window;
 	window.create();
@@ -54,22 +64,36 @@ int main(int argc, char **argv) {
 	printf("shader program created\n");
 
 	//obj.set_mesh(mesh);
-	obj.load_tetrahedron();
+	obj.load_doublepiramid();
 	obj.set_shader_program(shaderProgram);
-	obj.translate(-0.5, 0.5, -5.0);
-	obj.rotate(0.0, glm::vec3(1.0, 0.0, 0.0));
+	//obj.translate(-0.5, 0.5, -5.0);
+	//obj.rotate(0.0, glm::vec3(1.0, 0.0, 0.0));
+
+	camera0.translate(glm::vec3(0.0, -5.0, 0.0));
 	
 	sf::Event event;
 	
 	while(running) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		if(kmap.w)
+			camera0.translate(glm::vec3(0.0, 0.2, 0.0));
+		if(kmap.s)
+			camera0.translate(glm::vec3(0.0, -0.2, 0.0));
+		if(kmap.a)
+			camera0.translate(glm::vec3(-0.2, 0.0, 0.0));
+		if(kmap.d)
+			camera0.translate(glm::vec3(0.2, 0.0, 0.0));
+
+		camera0.update_model_matrix();
 		
 		//draw_scene();
-		obj.render(camera0.projectionMatrix);
+		obj.rotate(0.5f, glm::vec3(0.0, 0.0, 1.0));
+
+		obj.render(camera0.projectionMatrix, camera0.modelMatrix);
 
 		renderer.check_fps();
 		renderer.update_screen();
-		
 		
 		while(input_manager.poll_event(event)) {
 			if (event.Type == sf::Event::Closed)
@@ -79,7 +103,50 @@ int main(int argc, char **argv) {
 					case sf::Key::Escape:
 						running = false;
 						break;
+					case sf::Key::W:
+						kmap.w = true;
+						break;
+					case sf::Key::S:
+						kmap.s = true;
+						break;
+					case sf::Key::A:
+						kmap.a = true;
+						break;
+					case sf::Key::D:
+						kmap.d = true;
+						break;
+					case sf::Key::L:
+						lbool = true;
+						break;
 				}
+			else if(event.Type == sf::Event::KeyReleased) {
+				switch(event.Key.Code) {
+					case sf::Key::W:
+						kmap.w = false;
+						break;
+					case sf::Key::S:
+						kmap.s = false;
+						break;
+					case sf::Key::A:
+						kmap.a = false;
+						break;
+					case sf::Key::D:
+						kmap.d = false;
+						break;
+					case sf::Key::L:
+						lbool = false;
+						break;
+				}
+			}
+			else if(event.Type == sf::Event::MouseMoved) {
+				int dx = mousePos.x - window.sf_window.GetInput().GetMouseX();
+				int dy = mousePos.y - window.sf_window.GetInput().GetMouseY();
+
+				if(lbool) camera0.rotate((float)dx * 0.01, glm::vec3(0.0, 0.0, 1.0));
+				else camera0.rotate((float)dy * 0.01, glm::vec3(1.0, 0.0, 0.0));
+
+				window.sf_window.SetCursorPosition(window.width/2, window.height/2);
+			}
 		}
 	}
 }

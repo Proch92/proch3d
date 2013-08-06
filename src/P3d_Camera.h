@@ -8,9 +8,10 @@ struct P3d_Perspective {
 class P3d_Camera : public P3d_Entity {
 	public:
 		P3d_Camera();
-		glm::mat4 get_view_matrix();
+		void update_model_matrix();
 
 		glm::mat4 projectionMatrix;
+		glm::mat4 lookAt;
 	private:
 		struct P3d_Perspective persp;
 };

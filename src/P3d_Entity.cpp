@@ -37,6 +37,14 @@ void P3d_Entity::rotate(float angle, glm::vec3 axis) {
 	modelChanged = true;
 }
 
+void P3d_Entity::update_model_matrix() {
+	if(modelChanged) {
+		modelMatrix = glm::translate(glm::mat4(1.0), position) * glm::mat4_cast(rotation);
+
+		modelChanged = false;
+	}
+}
+
 glm::vec3 P3d_Entity::get_position() {
 	return position;
 }

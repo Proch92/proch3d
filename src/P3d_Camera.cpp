@@ -7,9 +7,14 @@ P3d_Camera::P3d_Camera() { //set default values
 	persp.far = 100.f;
 
 	projectionMatrix = glm::perspective(persp.fov, persp.aspect_ratio, persp.near, persp.far);
+
+	lookAt = glm::rotate(glm::mat4(), (float)90.0, glm::vec3(-1.0, 0.0, 0.0));
 }
 
-glm::mat4 P3d_Camera::get_view_matrix() {
-	return glm::inverse(modelMatrix);
+//override
+void P3d_Camera::update_model_matrix() {
+	if(modelChanged) {
+		modelMatrix = lookAt * glm::mat4_cast(glm::inverse(rotation)) * glm::translate(glm::mat4(1.0), -position);
+		modelChanged = false;
+	}
 }
-
