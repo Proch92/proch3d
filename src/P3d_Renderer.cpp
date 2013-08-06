@@ -15,14 +15,6 @@ P3d_Renderer::P3d_Renderer() {
 	showing_axis = false;
 }
 
-void P3d_Renderer::glLoadIdentity() {
-	glLoadIdentity();
-}
-
-void P3d_Renderer::clear_screen() {
-	glClear(GL_COLOR_BUFFER_BIT);
-}
-
 void P3d_Renderer::update_screen() {
 	if(current_camera == NULL) return;
 
@@ -69,7 +61,7 @@ void P3d_Renderer::show_xyz_axis(bool value) {
 }
 
 void P3d_Renderer::show_axis() {
-	glColor4f(1.0, 0.0, 0.0, 1.0);
+	/*glColor4f(1.0, 0.0, 0.0, 1.0);
 	glBegin(GL_LINE);
 		glVertex3f(-10.0, 0.0, 0.0);
 		glVertex3f(10.0, 0.0, 0.0);
@@ -85,7 +77,7 @@ void P3d_Renderer::show_axis() {
 	glBegin(GL_LINE);
 		glVertex3f(0.0, -10.0, 0.0);
 		glVertex3f(0.0, 10.0, 0.0);
-	glEnd();
+	glEnd();*/
 }
 
 void P3d_Renderer::show_debug_text(string message, int x, int y) {

@@ -14,8 +14,8 @@ bool P3d_Mesh::load_mesh(char* filename) {
 	vertices = NULL;
 	indices = NULL;
 
-	P3d_Vector3f zero3f(0, 0, 0);
-	P3d_Vector2f zero2f(0, 0);
+	glm::vec3 zero3f(0, 0, 0);
+	glm::vec2 zero2f(0, 0);
 
 	printf("loading %s\n", filename);
 	Assimp::Importer importer;
@@ -52,12 +52,12 @@ bool P3d_Mesh::load_mesh(char* filename) {
 
 		int j;
 		for(j=0; j!=num_vertices; j++) {
-			vertices[j].set_position(P3d_Vector3f(mesh->mVertices[j].x, mesh->mVertices[j].y, mesh->mVertices[j].z));
+			vertices[j].set_position(glm::vec3(mesh->mVertices[j].x, mesh->mVertices[j].y, mesh->mVertices[j].z));
 			
-			if(has_tex) vertices[j].set_tex_coordinate(P3d_Vector2f(mesh->mTextureCoords[0][j].x, mesh->mTextureCoords[0][j].y));
+			if(has_tex) vertices[j].set_tex_coordinate(glm::vec2(mesh->mTextureCoords[0][j].x, mesh->mTextureCoords[0][j].y));
 			else vertices[j].set_tex_coordinate(zero2f);
 			
-			if(has_norm) vertices[j].set_normal(P3d_Vector3f(mesh->mNormals[j].x, mesh->mNormals[j].y, mesh->mNormals[j].z));
+			if(has_norm) vertices[j].set_normal(glm::vec3(mesh->mNormals[j].x, mesh->mNormals[j].y, mesh->mNormals[j].z));
 			else vertices[j].set_normal(zero3f);
 		}
 

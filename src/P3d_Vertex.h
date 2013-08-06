@@ -1,10 +1,10 @@
 class P3d_Vertex {
 	public:
-		P3d_Vertex(const P3d_Vector3f&, const P3d_Vector2f&, const P3d_Vector3f&);
-		void set_position(const P3d_Vector3f&);
-		void set_tex_coordinate(const P3d_Vector2f&);
-		void set_normal(const P3d_Vector3f&);
-		P3d_Vector3f pos;
-		P3d_Vector2f tex;
-		P3d_Vector3f norm;
+		P3d_Vertex(const glm::vec3&, const glm::vec2&, const glm::vec3&);
+		void set_position(const glm::vec3&);
+		void set_tex_coordinate(const glm::vec2&);
+		void set_normal(const glm::vec3&);
+		glm::vec3 pos;
+		glm::vec2 tex;
+		glm::vec3 norm;
 };

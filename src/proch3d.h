@@ -1,3 +1,5 @@
+//#define GLEW_STATIC
+
 //utils
 #include <string>
 #include "stdio.h"
@@ -10,18 +12,20 @@
 #include <sstream>
 
 //libraries
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include <GL/glew.h>
 #include "SFML/System.hpp"
 #include "SFML/Window.hpp"
 #include "SFML/Graphics.hpp"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 using namespace std;
 
 //proch3d engine
 #include "utils.h"
 #include "P3d_Timer.h"
-#include "P3d_Math.h"
+//#include "P3d_Math.h"
 #include "P3d_Entity.h"
 #include "P3d_Vertex.h"
 #include "P3d_Mesh.h"

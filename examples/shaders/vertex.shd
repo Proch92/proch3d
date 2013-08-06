@@ -1,0 +1,16 @@
+#version 130
+
+in vec3 inPosition;
+in vec4 inColor;
+
+out vec4 Color;
+
+//uniform mat4 view;
+uniform mat4 proj;
+uniform mat4 model;
+
+void main() {
+	gl_Position = proj * model * vec4(inPosition, 1.0);
+
+	Color = inColor;
+}

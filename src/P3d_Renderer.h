@@ -3,10 +3,8 @@
 class P3d_Renderer {
 	public:
 		P3d_Renderer();
-		void clear_screen();
 		void update_screen();
 		void check_fps();
-		void glLoadIdentity();
 		void set_inrender_function(void (*foo) ());
 		void set_clear_color(float, float, float, float);
 		void set_max_fps(int);

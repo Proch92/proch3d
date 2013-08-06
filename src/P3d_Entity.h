@@ -2,12 +2,18 @@ class P3d_Entity {
 	public:
 		P3d_Entity();
 		void translate(float, float, float);
-		void translate(const P3d_Vector3f&);
-		void set_position(P3d_Vector3f);
+		void translate(const glm::vec3&);
+		void set_position(glm::vec3);
 		void rotate(float, float, float);
-		P3d_Vector3f get_position();
-		P3d_Vector3f get_orientation();
+		void rotate(float, glm::vec3);
+		glm::vec3 get_position();
+		glm::vec3 get_orientation();
+		glm::quat get_rotation();
+		
+		glm::mat4 modelMatrix;
 	protected:
-		P3d_Vector3f position;
-		P3d_Vector3f orientation;
+		glm::vec3 position;
+		glm::quat rotation;
+
+		bool modelChanged;
 };
