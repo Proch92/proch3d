@@ -33,6 +33,20 @@ void P3d_Entity::rotate(float A, float B, float C) {
 
 void P3d_Entity::rotate(float angle, glm::vec3 axis) {
 	rotation = glm::angleAxis(angle, axis) * rotation;
+	//rotation = glm::rotate(rotation, angle, axis);
+
+	modelChanged = true;
+}
+
+//movement [front, side, up]
+void P3d_Entity::orientedMove(glm::vec3 movement) {
+	glm::vec3 front = rotation * FRONT;
+	glm::vec3 up = rotation * UP;
+	glm::vec3 right = rotation * RIGHT;
+	
+	position += glm::vec3(front.x * movement.x, front.y * movement.x, front.z * movement.x);
+	position += glm::vec3(right.x * movement.y, right.y * movement.y, right.z * movement.y);
+	position += glm::vec3(up.x * movement.z, up.y * movement.z, up.z * movement.z);
 
 	modelChanged = true;
 }
@@ -50,7 +64,7 @@ glm::vec3 P3d_Entity::get_position() {
 }
 
 glm::vec3 P3d_Entity::get_orientation() {
-	return rotation * glm::vec3(0.0, 1.0, 0.0);
+	return rotation * FRONT;
 }
 
 glm::quat P3d_Entity::get_rotation() {

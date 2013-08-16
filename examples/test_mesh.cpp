@@ -16,14 +16,14 @@ bool running = true;
 struct keymap {
 	bool w,s,a,d;
 } kmap;
-bool lbool;
+bool lbool, kbool, jbool;
 glm::vec2 mousePos;
 
 int main(int argc, char **argv) {
 	printf("start\n");
 
 	kmap.w = kmap.s = kmap.a = kmap.d = false;
-	lbool = false;
+	lbool = kbool = jbool = false;
 	mousePos = glm::vec2(DEFAULT_SCREEN_WIDTH/2.0, DEFAULT_SCREEN_HEIGHT/2.0);
 
 	P3d_Window window;
@@ -49,6 +49,10 @@ int main(int argc, char **argv) {
 	
 	P3d_Camera camera0;
 	renderer.set_current_camera(&camera0);
+
+	camera0.update_model_matrix();
+	//camera0.rotate(90.0, glm::vec3(1.0, 0.0, 0.0));
+	//camera0.pitch(90.0);
 	
 	printf("loading media\n");
 	load_media();
@@ -70,6 +74,7 @@ int main(int argc, char **argv) {
 	//obj.rotate(0.0, glm::vec3(1.0, 0.0, 0.0));
 
 	camera0.translate(glm::vec3(0.0, -5.0, 0.0));
+	//camera0.orientedMove(glm::vec3(-5.0, 0.0, 0.0));
 	
 	sf::Event event;
 	
@@ -77,19 +82,23 @@ int main(int argc, char **argv) {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		if(kmap.w)
-			camera0.translate(glm::vec3(0.0, 0.2, 0.0));
+			camera0.orientedMove(glm::vec3(0.2, 0.0, 0.0));
 		if(kmap.s)
-			camera0.translate(glm::vec3(0.0, -0.2, 0.0));
+			camera0.orientedMove(glm::vec3(-0.2, 0.0, 0.0));
 		if(kmap.a)
-			camera0.translate(glm::vec3(-0.2, 0.0, 0.0));
+			camera0.orientedMove(glm::vec3(0.0, -0.2, 0.0));
 		if(kmap.d)
-			camera0.translate(glm::vec3(0.2, 0.0, 0.0));
+			camera0.orientedMove(glm::vec3(0.0, 0.2, 0.0));
 
-		camera0.update_model_matrix();
+		/*if(kbool)
+			camera0.rotate(0.1, glm::axis(camera0.get_rotation()));
+		if(jbool)
+			camera0.rotate(-0.1, glm::axis(camera0.get_rotation()));*/
 		
 		//draw_scene();
 		obj.rotate(0.5f, glm::vec3(0.0, 0.0, 1.0));
 
+		camera0.update_model_matrix();
 		obj.render(camera0.projectionMatrix, camera0.modelMatrix);
 
 		renderer.check_fps();
@@ -118,6 +127,12 @@ int main(int argc, char **argv) {
 					case sf::Key::L:
 						lbool = true;
 						break;
+					case sf::Key::K:
+						kbool = true;
+						break;
+					case sf::Key::J:
+						jbool = true;
+						break;
 				}
 			else if(event.Type == sf::Event::KeyReleased) {
 				switch(event.Key.Code) {
@@ -136,14 +151,24 @@ int main(int argc, char **argv) {
 					case sf::Key::L:
 						lbool = false;
 						break;
+					case sf::Key::K:
+						kbool = false;
+						break;
+					case sf::Key::J:
+						jbool = false;
+						break;
 				}
 			}
 			else if(event.Type == sf::Event::MouseMoved) {
-				int dx = mousePos.x - window.sf_window.GetInput().GetMouseX();
-				int dy = mousePos.y - window.sf_window.GetInput().GetMouseY();
+				int dx = window.sf_window.GetInput().GetMouseX() - window.width/2;
+				int dy = window.sf_window.GetInput().GetMouseY() - window.height/2;
 
-				if(lbool) camera0.rotate((float)dx * 0.01, glm::vec3(0.0, 0.0, 1.0));
-				else camera0.rotate((float)dy * 0.01, glm::vec3(1.0, 0.0, 0.0));
+				/*if(lbool) camera0.rotate((float)dx * 0.01, glm::vec3(0.0, 0.0, 1.0));
+				else camera0.rotate((float)dy * 0.01, glm::vec3(1.0, 0.0, 0.0));*/
+				camera0.yaw((float)-dx * 0.01);
+				camera0.pitch((float)-dy * 0.01);
+				//camera0.rotate((float)dx * 0.01, glm::vec3(0.0, 0.0, -1.0));
+				//camera0.rotate((float)dy * 0.01, glm::vec3(-1.0, 0.0, 0.0));
 
 				window.sf_window.SetCursorPosition(window.width/2, window.height/2);
 			}
