@@ -6,7 +6,7 @@ class P3d_Object : public P3d_Entity {
 		void set_mesh(P3d_Mesh*);
 		void set_shader_program(GLuint);
 
-		void load_cube(int);
+		/*void load_cube(int);
 		void load_tetrahedron();
 		void load_doublepiramid();
 		void load_test();
@@ -22,7 +22,7 @@ class P3d_Object : public P3d_Entity {
 		GLuint vb;
 		GLuint ib;
 		GLuint cb;
-		GLuint vao;
+		GLuint vao;*/
 
 		GLuint shader_program;
 	protected:

@@ -27,7 +27,7 @@ P3d_Window::P3d_Window(int w, int h, const char* w_name) {
 
 
 void P3d_Window::create() {
-	sf_window.Create(sf::VideoMode(width, height, 32), window_name, sf::Style::Fullscreen);
+	sf_window.Create(sf::VideoMode(width, height, 32), window_name/*, sf::Style::Fullscreen*/);
 	sf_window.SetCursorPosition(width/2, height/2);
 	sf_window.ShowMouseCursor(false);
 	resize();
@@ -37,7 +37,7 @@ void P3d_Window::create() {
 
 void P3d_Window::resize() {
 	if(created)
-		sf_window.Create(sf::VideoMode(width, height, 32), window_name, sf::Style::Fullscreen);
+		sf_window.Create(sf::VideoMode(width, height, 32), window_name/*, sf::Style::Fullscreen*/);
 	glViewport(0, 0, (GLsizei)width, (GLsizei)height);
 }
 

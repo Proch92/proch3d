@@ -67,8 +67,8 @@ int main(int argc, char **argv) {
 	glUseProgram(shaderProgram);
 	printf("shader program created\n");
 
-	//obj.set_mesh(mesh);
-	obj.load_doublepiramid();
+	obj.set_mesh(mesh);
+	//obj.load_doublepiramid();
 	obj.set_shader_program(shaderProgram);
 	//obj.translate(-0.5, 0.5, -5.0);
 	//obj.rotate(0.0, glm::vec3(1.0, 0.0, 0.0));
@@ -165,8 +165,8 @@ int main(int argc, char **argv) {
 
 				/*if(lbool) camera0.rotate((float)dx * 0.01, glm::vec3(0.0, 0.0, 1.0));
 				else camera0.rotate((float)dy * 0.01, glm::vec3(1.0, 0.0, 0.0));*/
-				camera0.yaw((float)-dx * 0.01);
-				camera0.pitch((float)-dy * 0.01);
+				camera0.yaw((float)-dx * 0.005);
+				camera0.pitch((float)-dy * 0.005);
 				//camera0.rotate((float)dx * 0.01, glm::vec3(0.0, 0.0, -1.0));
 				//camera0.rotate((float)dy * 0.01, glm::vec3(-1.0, 0.0, 0.0));
 
@@ -181,7 +181,7 @@ void draw_scene() {
 }
 
 void load_media() {
-	//mesh = P3d_load_mesh("examples/prova.obj");
+	mesh = P3d_load_mesh("examples/cube.stl");
 
 	vertex_shd = glCreateShader(GL_VERTEX_SHADER);
 	load_shader("examples/shaders/vertex.shd", vertex_shd);

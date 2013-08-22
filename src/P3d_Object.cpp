@@ -4,12 +4,12 @@ P3d_Object::P3d_Object() {
 	hidden = false;
 	mesh = NULL;
 	
-	vertices = NULL;
+	/*vertices = NULL;
 	texcoords = NULL;
 	colors = NULL;
 
 	num_vertices = 0;
-	num_indices = 0;	
+	num_indices = 0;*/	
 }
 
 void P3d_Object::render(glm::mat4 &proj, glm::mat4 view) {
@@ -26,10 +26,10 @@ void P3d_Object::render(glm::mat4 &proj, glm::mat4 view) {
 	GLint uniModel = glGetUniformLocation(shader_program, "model");
 	glUniformMatrix4fv(uniModel, 1, GL_FALSE, glm::value_ptr(modelMatrix));
 
-	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, 0);
+	//glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, 0);
 
 	if(mesh != NULL)
-		mesh->render();
+		mesh->render(shader_program);
 }
 
 void P3d_Object::set_mesh(P3d_Mesh* m) {
@@ -39,7 +39,7 @@ void P3d_Object::set_mesh(P3d_Mesh* m) {
 void P3d_Object::set_shader_program(GLuint sp) {
 	shader_program = sp;
 
-	glBindBuffer(GL_ARRAY_BUFFER, vb);
+	/*glBindBuffer(GL_ARRAY_BUFFER, vb);
 	GLint posAttrib = glGetAttribLocation(shader_program, "inPosition");
 	glEnableVertexAttribArray(posAttrib);
 	glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -47,10 +47,10 @@ void P3d_Object::set_shader_program(GLuint sp) {
 	glBindBuffer(GL_ARRAY_BUFFER, cb);
 	GLint colAttrib = glGetAttribLocation(shader_program, "inColor");
 	glEnableVertexAttribArray(colAttrib);
-	glVertexAttribPointer(colAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(colAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);*/
 }
 
-void P3d_Object::load_cube(int n) {
+/*void P3d_Object::load_cube(int n) {
 	num_vertices = 8;
 	float n2 = (float)n / 2;
 	vertices = new float[24] {
@@ -237,4 +237,4 @@ void P3d_Object::load_doublepiramid() {
 }
 
 void P3d_Object::load_test() {
-}
+}*/
