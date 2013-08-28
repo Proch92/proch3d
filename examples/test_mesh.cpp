@@ -181,7 +181,7 @@ void draw_scene() {
 }
 
 void load_media() {
-	mesh = P3d_load_mesh("examples/cube.stl");
+	mesh = P3d_load_mesh("examples/cube.p3d");
 
 	vertex_shd = glCreateShader(GL_VERTEX_SHADER);
 	load_shader("examples/shaders/vertex.shd", vertex_shd);

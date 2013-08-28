@@ -1,9 +1,9 @@
 #version 130
 
 in vec3 inPosition;
-in vec4 inColor;
+in vec3 inNormal;
 
-out vec4 Color;
+out vec3 Normal;
 
 uniform mat4 view;
 uniform mat4 proj;
@@ -12,5 +12,5 @@ uniform mat4 model;
 void main() {
 	gl_Position = proj * view * model * vec4(inPosition, 1.0);
 
-	Color = inColor;
+	Normal = inNormal;
 }

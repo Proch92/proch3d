@@ -17,14 +17,27 @@ void P3d_Object::render(glm::mat4 &proj, glm::mat4 view) {
 
 	update_model_matrix();
 	
-	GLint uniProj = glGetUniformLocation(shader_program, "proj");
+	GLuint uniProj = glGetUniformLocation(shader_program, "proj");
 	glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(proj));
 
-	GLint uniView = glGetUniformLocation(shader_program, "view");
+	GLuint uniView = glGetUniformLocation(shader_program, "view");
 	glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));
 
-	GLint uniModel = glGetUniformLocation(shader_program, "model");
+	GLuint uniModel = glGetUniformLocation(shader_program, "model");
 	glUniformMatrix4fv(uniModel, 1, GL_FALSE, glm::value_ptr(modelMatrix));
+
+	//ambient light
+	glm::vec4 ambientLight(0.2, 0.2, 0.2, 1.0);
+	GLuint uniAmbient = glGetUniformLocation(shader_program, "ambientLight");
+	glUniform4f(uniAmbient, ambientLight[0], ambientLight[1], ambientLight[2], ambientLight[3]);
+
+	//directional light
+	glm::vec4 dirLightColor(0.8, 0.8, 0.8, 1.0);
+	glm::vec3 dirLightDirection(1.0, 0.0, 0.0);
+	GLuint uniDirLightColor = glGetUniformLocation(shader_program, "dirLightColor");
+	glUniform4f(uniDirLightColor, dirLightColor[0], dirLightColor[1], dirLightColor[2], dirLightColor[3]);
+	GLuint uniDirLightDirection = glGetUniformLocation(shader_program, "dirLightDirection");
+	glUniform3f(uniDirLightDirection, dirLightDirection.x, dirLightDirection.y, dirLightDirection.z);
 
 	//glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, 0);
 
