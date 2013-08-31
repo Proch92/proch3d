@@ -6,24 +6,6 @@ class P3d_Object : public P3d_Entity {
 		void set_mesh(P3d_Mesh*);
 		void set_shader_program(GLuint);
 
-		/*void load_cube(int);
-		void load_tetrahedron();
-		void load_doublepiramid();
-		void load_test();
-		
-		float *vertices;
-		int *indices;
-		float *texcoords;
-		float *colors;
-
-		int num_vertices;
-		int num_indices;
-
-		GLuint vb;
-		GLuint ib;
-		GLuint cb;
-		GLuint vao;*/
-
 		GLuint shader_program;
 	protected:
 		bool hidden;

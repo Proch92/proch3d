@@ -3,13 +3,6 @@
 P3d_Object::P3d_Object() {
 	hidden = false;
 	mesh = NULL;
-	
-	/*vertices = NULL;
-	texcoords = NULL;
-	colors = NULL;
-
-	num_vertices = 0;
-	num_indices = 0;*/	
 }
 
 void P3d_Object::render(glm::mat4 &proj, glm::mat4 view) {
@@ -26,20 +19,37 @@ void P3d_Object::render(glm::mat4 &proj, glm::mat4 view) {
 	GLuint uniModel = glGetUniformLocation(shader_program, "model");
 	glUniformMatrix4fv(uniModel, 1, GL_FALSE, glm::value_ptr(modelMatrix));
 
+	GLuint uniRot = glGetUniformLocation(shader_program, "rot");
+	glUniformMatrix4fv(uniModel, 1, GL_FALSE, glm::value_ptr(glm::mat4_cast(rotation)));
+
 	//ambient light
-	glm::vec4 ambientLight(0.2, 0.2, 0.2, 1.0);
+	glm::vec4 ambientLight(1.0, 1.0, 1.0, 1.0);
 	GLuint uniAmbient = glGetUniformLocation(shader_program, "ambientLight");
 	glUniform4f(uniAmbient, ambientLight[0], ambientLight[1], ambientLight[2], ambientLight[3]);
+	float ambientLightIntensity = 0.3;
+	GLuint uniAmbientIntensity = glGetUniformLocation(shader_program, "ambientLightIntensity");
+	glUniform1f(uniAmbientIntensity, ambientLightIntensity);
 
 	//directional light
-	glm::vec4 dirLightColor(0.8, 0.8, 0.8, 1.0);
-	glm::vec3 dirLightDirection(1.0, 0.0, 0.0);
+	glm::vec4 dirLightColor(0.5, 0.5, 0.5, 1.0);
+	glm::vec4 dirLightDirection(1.0, 0.0, 0.0, 1.0);
+	dirLightDirection = dirLightDirection * glm::mat4_cast(rotation);
+	//print_vec4(dirLightDirection);
 	GLuint uniDirLightColor = glGetUniformLocation(shader_program, "dirLightColor");
 	glUniform4f(uniDirLightColor, dirLightColor[0], dirLightColor[1], dirLightColor[2], dirLightColor[3]);
 	GLuint uniDirLightDirection = glGetUniformLocation(shader_program, "dirLightDirection");
 	glUniform3f(uniDirLightDirection, dirLightDirection.x, dirLightDirection.y, dirLightDirection.z);
 
-	//glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, 0);
+	//point light
+	glm::vec3 pointLightPosition(5.0, 5.0, 5.0);
+	glm::vec4 pointLightColor(1.0, 0.0, 0.0, 1.0);
+	pointLightPosition = pointLightPosition - position;
+
+	GLuint uniPointLightPos = glGetUniformLocation(shader_program, "pointLightPos");
+	glUniform3f(uniPointLightPos, pointLightPosition.x, pointLightPosition.y, pointLightPosition.z);
+	GLuint uniPointLightColor = glGetUniformLocation(shader_program, "pointLightColor");
+	glUniform3f(uniPointLightColor, pointLightColor.x, pointLightColor.y, pointLightColor.z, pointLightColor[3]);
+
 
 	if(mesh != NULL)
 		mesh->render(shader_program);
@@ -51,16 +61,6 @@ void P3d_Object::set_mesh(P3d_Mesh* m) {
 
 void P3d_Object::set_shader_program(GLuint sp) {
 	shader_program = sp;
-
-	/*glBindBuffer(GL_ARRAY_BUFFER, vb);
-	GLint posAttrib = glGetAttribLocation(shader_program, "inPosition");
-	glEnableVertexAttribArray(posAttrib);
-	glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, cb);
-	GLint colAttrib = glGetAttribLocation(shader_program, "inColor");
-	glEnableVertexAttribArray(colAttrib);
-	glVertexAttribPointer(colAttrib, 4, GL_FLOAT, GL_FALSE, 0, 0);*/
 }
 
 /*void P3d_Object::load_cube(int n) {

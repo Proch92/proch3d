@@ -56,6 +56,10 @@ void print_vec3(const glm::vec3 &vec) {
 	printf("[%f, %f, %f]\n", vec.x, vec.y, vec.z);
 }
 
+void print_vec4(const glm::vec4 &vec) {
+	printf("[%f, %f, %f, %f]\n", vec.x, vec.y, vec.z, vec[3]);
+}
+
 glm::quat RotationBetweenVectors(glm::vec3 start, glm::vec3 dest){
 	start = glm::normalize(start);
 	dest = glm::normalize(dest);

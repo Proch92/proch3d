@@ -5,4 +5,5 @@ void p3d_delay(long);
 void load_shader(const char*, GLuint);
 void print_mat4(const glm::mat4&);
 void print_vec3(const glm::vec3&);
+void print_vec4(const glm::vec4&);
 glm::quat RotationBetweenVectors(glm::vec3, glm::vec3);

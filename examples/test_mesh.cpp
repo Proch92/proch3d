@@ -51,8 +51,6 @@ int main(int argc, char **argv) {
 	renderer.set_current_camera(&camera0);
 
 	camera0.update_model_matrix();
-	//camera0.rotate(90.0, glm::vec3(1.0, 0.0, 0.0));
-	//camera0.pitch(90.0);
 	
 	printf("loading media\n");
 	load_media();
@@ -68,13 +66,9 @@ int main(int argc, char **argv) {
 	printf("shader program created\n");
 
 	obj.set_mesh(mesh);
-	//obj.load_doublepiramid();
 	obj.set_shader_program(shaderProgram);
-	//obj.translate(-0.5, 0.5, -5.0);
-	//obj.rotate(0.0, glm::vec3(1.0, 0.0, 0.0));
 
 	camera0.translate(glm::vec3(0.0, -5.0, 0.0));
-	//camera0.orientedMove(glm::vec3(-5.0, 0.0, 0.0));
 	
 	sf::Event event;
 	
@@ -90,13 +84,13 @@ int main(int argc, char **argv) {
 		if(kmap.d)
 			camera0.orientedMove(glm::vec3(0.0, 0.2, 0.0));
 
-		/*if(kbool)
-			camera0.rotate(0.1, glm::axis(camera0.get_rotation()));
+		if(kbool)
+			obj.rotate(0.5f, glm::vec3(0.0, 0.0, 1.0));
 		if(jbool)
-			camera0.rotate(-0.1, glm::axis(camera0.get_rotation()));*/
+			obj.rotate(-0.5f, glm::vec3(0.0, 0.0, 1.0));
 		
-		//draw_scene();
-		obj.rotate(0.5f, glm::vec3(0.0, 0.0, 1.0));
+		//obj.rotate(0.5f, glm::vec3(0.0, 0.0, 1.0));
+		//obj.rotate(0.5f, glm::vec3(1.0, 0.0, 0.0));
 
 		camera0.update_model_matrix();
 		obj.render(camera0.projectionMatrix, camera0.modelMatrix);
@@ -163,12 +157,8 @@ int main(int argc, char **argv) {
 				int dx = window.sf_window.GetInput().GetMouseX() - window.width/2;
 				int dy = window.sf_window.GetInput().GetMouseY() - window.height/2;
 
-				/*if(lbool) camera0.rotate((float)dx * 0.01, glm::vec3(0.0, 0.0, 1.0));
-				else camera0.rotate((float)dy * 0.01, glm::vec3(1.0, 0.0, 0.0));*/
 				camera0.yaw((float)-dx * 0.005);
 				camera0.pitch((float)-dy * 0.005);
-				//camera0.rotate((float)dx * 0.01, glm::vec3(0.0, 0.0, -1.0));
-				//camera0.rotate((float)dy * 0.01, glm::vec3(-1.0, 0.0, 0.0));
 
 				window.sf_window.SetCursorPosition(window.width/2, window.height/2);
 			}
@@ -181,7 +171,7 @@ void draw_scene() {
 }
 
 void load_media() {
-	mesh = P3d_load_mesh("examples/cube.p3d");
+	mesh = P3d_load_mesh("examples/monkey.p3d");
 
 	vertex_shd = glCreateShader(GL_VERTEX_SHADER);
 	load_shader("examples/shaders/vertex.shd", vertex_shd);

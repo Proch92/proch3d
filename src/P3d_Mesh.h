@@ -5,7 +5,6 @@ class P3d_Mesh {
 		void render(GLuint);
 		bool load_mesh(FILE*);
 
-		//P3d_Vertex* vertices;
 		float* vertices;
 		float* texcoords;
 		float* colors;

@@ -25,7 +25,6 @@ using namespace std;
 //proch3d engine
 #include "utils.h"
 #include "P3d_Timer.h"
-//#include "P3d_Math.h"
 #include "P3d_Entity.h"
 #include "P3d_Vertex.h"
 #include "P3d_Mesh.h"
@@ -34,3 +33,6 @@ using namespace std;
 #include "P3d_Camera.h"
 #include "P3d_Renderer.h"
 #include "P3d_InputManager.h"
+
+#define FLAT_SHADING true
+#define SMOOTH_SHADING false

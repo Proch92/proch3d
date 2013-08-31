@@ -43,9 +43,25 @@ bool P3d_Mesh::load_mesh(FILE* fin) {
 	fnormals = (float*) malloc(sizeof(float) * num_vertices * 3);
 	int i;
 	for(i=0; i!=num_faces; i++) {
-		memcpy(&fnormals[indices[i*3 + 0]], &fn[i], sizeof(float) * 3);
-		memcpy(&fnormals[indices[i*3 + 1]], &fn[i], sizeof(float) * 3);
-		memcpy(&fnormals[indices[i*3 + 2]], &fn[i], sizeof(float) * 3);
+		float* ptr_fn = &(fn[i * 3]);
+		memcpy(&fnormals[indices[i*3 + 0] * 3], ptr_fn, sizeof(float) * 3);
+		memcpy(&fnormals[indices[i*3 + 1] * 3], ptr_fn, sizeof(float) * 3);
+		memcpy(&fnormals[indices[i*3 + 2] * 3], ptr_fn, sizeof(float) * 3);
+	}
+
+	printf("face normals\n");
+	for(i=0; i!=num_faces; i++) {
+		print_vec3(glm::vec3(fnormals[indices[i*3 + 0] * 3 + 0], fnormals[indices[i*3 + 0] * 3 + 1], fnormals[indices[i*3 + 0] * 3 + 2]));
+		print_vec3(glm::vec3(fnormals[indices[i*3 + 1] * 3 + 0], fnormals[indices[i*3 + 1] * 3 + 1], fnormals[indices[i*3 + 1] * 3 + 2]));
+		print_vec3(glm::vec3(fnormals[indices[i*3 + 2] * 3 + 0], fnormals[indices[i*3 + 2] * 3 + 1], fnormals[indices[i*3 + 2] * 3 + 2]));
+	}
+
+	for(i=0; i!=num_faces; i++) {
+		printf("calculating face normal\n");
+		print_vec3(glm::vec3(vertices[indices[i*3 + 0] * 3 + 0], vertices[indices[i*3 + 0] * 3 + 1], vertices[indices[i*3 + 0] * 3 + 2]));
+		print_vec3(glm::vec3(vertices[indices[i*3 + 1] * 3 + 0], vertices[indices[i*3 + 1] * 3 + 1], vertices[indices[i*3 + 1] * 3 + 2]));
+		print_vec3(glm::vec3(vertices[indices[i*3 + 2] * 3 + 0], vertices[indices[i*3 + 2] * 3 + 1], vertices[indices[i*3 + 2] * 3 + 2]));
+		printf("n:"); print_vec3(glm::vec3(fnormals[indices[i*3 + 2] * 3 + 0], fnormals[indices[i*3 + 2] * 3 + 1], fnormals[indices[i*3 + 2] * 3 + 2]));
 	}
 
 	glGenBuffers(1, &vb);
@@ -56,10 +72,18 @@ bool P3d_Mesh::load_mesh(FILE* fin) {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, num_indices * sizeof(int), indices, GL_STATIC_DRAW);
 
-	//default shading -> FLAT
-	glGenBuffers(1, &nb);
-	glBindBuffer(GL_ARRAY_BUFFER, nb);
-	glBufferData(GL_ARRAY_BUFFER, num_vertices * 3 * sizeof(float), fnormals, GL_STATIC_DRAW);
+	if(FLAT_SHADING) {
+		//flat shading
+		glGenBuffers(1, &nb);
+		glBindBuffer(GL_ARRAY_BUFFER, nb);
+		glBufferData(GL_ARRAY_BUFFER, num_vertices * 3 * sizeof(float), fnormals, GL_STATIC_DRAW);
+	}
+	else {
+		//smooth shading
+		glGenBuffers(1, &nb);
+		glBindBuffer(GL_ARRAY_BUFFER, nb);
+		glBufferData(GL_ARRAY_BUFFER, num_vertices * 3 * sizeof(float), normals, GL_STATIC_DRAW);
+	}
 
 	return true;
 }
@@ -76,6 +100,9 @@ void P3d_Mesh::render(GLuint shader_program) {
 	glVertexAttribPointer(normAttrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, 0);
+
+	//debug
+
 }
 
 //load call

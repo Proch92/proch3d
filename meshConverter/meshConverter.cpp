@@ -105,6 +105,11 @@ int main(int argc, char **argv)
 
 			//calculating face normal
 			meshes[i].faces[j].face_normal = glm::triangleNormal(meshes[i].faces[j].v[0]->v, meshes[i].faces[j].v[1]->v, meshes[i].faces[j].v[2]->v);
+			printf("calculating face normal\n");
+			print_vec3(meshes[i].faces[j].v[0]->v);
+			print_vec3(meshes[i].faces[j].v[1]->v);
+			print_vec3(meshes[i].faces[j].v[2]->v);
+			printf("n:"); print_vec3(meshes[i].faces[j].face_normal);
 		}
 
 		//generating vertex normals
