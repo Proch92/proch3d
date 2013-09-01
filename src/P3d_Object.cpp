@@ -26,12 +26,12 @@ void P3d_Object::render(glm::mat4 &proj, glm::mat4 view) {
 	glm::vec4 ambientLight(1.0, 1.0, 1.0, 1.0);
 	GLuint uniAmbient = glGetUniformLocation(shader_program, "ambientLight");
 	glUniform4f(uniAmbient, ambientLight[0], ambientLight[1], ambientLight[2], ambientLight[3]);
-	float ambientLightIntensity = 0.3;
+	float ambientLightIntensity = 0.1;
 	GLuint uniAmbientIntensity = glGetUniformLocation(shader_program, "ambientLightIntensity");
 	glUniform1f(uniAmbientIntensity, ambientLightIntensity);
 
 	//directional light
-	glm::vec4 dirLightColor(0.5, 0.5, 0.5, 1.0);
+	glm::vec4 dirLightColor(0.3, 0.3, 0.3, 1.0);
 	glm::vec4 dirLightDirection(1.0, 0.0, 0.0, 1.0);
 	dirLightDirection = dirLightDirection * glm::mat4_cast(rotation);
 	//print_vec4(dirLightDirection);
@@ -41,14 +41,16 @@ void P3d_Object::render(glm::mat4 &proj, glm::mat4 view) {
 	glUniform3f(uniDirLightDirection, dirLightDirection.x, dirLightDirection.y, dirLightDirection.z);
 
 	//point light
-	glm::vec3 pointLightPosition(5.0, 5.0, 5.0);
-	glm::vec4 pointLightColor(1.0, 0.0, 0.0, 1.0);
-	pointLightPosition = pointLightPosition - position;
+	glm::vec4 pointLightPosition(0.0, -2.0, 1.5, 1.0);
+	glm::vec4 pointLightColor(1.0, 1.0, 1.0, 1.0);
+	pointLightPosition = pointLightPosition - glm::vec4(position, 1.0);
+	pointLightPosition = pointLightPosition * glm::mat4_cast(rotation);
+	//print_vec4(pointLightPosition);
 
 	GLuint uniPointLightPos = glGetUniformLocation(shader_program, "pointLightPos");
-	glUniform3f(uniPointLightPos, pointLightPosition.x, pointLightPosition.y, pointLightPosition.z);
+	glUniform4f(uniPointLightPos, pointLightPosition.x, pointLightPosition.y, pointLightPosition.z, pointLightPosition[3]);
 	GLuint uniPointLightColor = glGetUniformLocation(shader_program, "pointLightColor");
-	glUniform3f(uniPointLightColor, pointLightColor.x, pointLightColor.y, pointLightColor.z, pointLightColor[3]);
+	glUniform4f(uniPointLightColor, pointLightColor.r, pointLightColor.g, pointLightColor.b, pointLightColor.a);
 
 
 	if(mesh != NULL)
