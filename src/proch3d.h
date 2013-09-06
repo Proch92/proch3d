@@ -34,5 +34,5 @@ using namespace std;
 #include "P3d_Renderer.h"
 #include "P3d_InputManager.h"
 
-#define FLAT_SHADING true
-#define SMOOTH_SHADING false
+#define FLAT_SHADING false
+#define SMOOTH_SHADING true

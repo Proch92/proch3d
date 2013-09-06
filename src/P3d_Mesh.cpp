@@ -49,7 +49,7 @@ bool P3d_Mesh::load_mesh(FILE* fin) {
 		memcpy(&fnormals[indices[i*3 + 2] * 3], ptr_fn, sizeof(float) * 3);
 	}
 
-	printf("face normals\n");
+	/*printf("face normals\n");
 	for(i=0; i!=num_faces; i++) {
 		print_vec3(glm::vec3(fnormals[indices[i*3 + 0] * 3 + 0], fnormals[indices[i*3 + 0] * 3 + 1], fnormals[indices[i*3 + 0] * 3 + 2]));
 		print_vec3(glm::vec3(fnormals[indices[i*3 + 1] * 3 + 0], fnormals[indices[i*3 + 1] * 3 + 1], fnormals[indices[i*3 + 1] * 3 + 2]));
@@ -62,7 +62,7 @@ bool P3d_Mesh::load_mesh(FILE* fin) {
 		print_vec3(glm::vec3(vertices[indices[i*3 + 1] * 3 + 0], vertices[indices[i*3 + 1] * 3 + 1], vertices[indices[i*3 + 1] * 3 + 2]));
 		print_vec3(glm::vec3(vertices[indices[i*3 + 2] * 3 + 0], vertices[indices[i*3 + 2] * 3 + 1], vertices[indices[i*3 + 2] * 3 + 2]));
 		printf("n:"); print_vec3(glm::vec3(fnormals[indices[i*3 + 2] * 3 + 0], fnormals[indices[i*3 + 2] * 3 + 1], fnormals[indices[i*3 + 2] * 3 + 2]));
-	}
+	}*/
 
 	glGenBuffers(1, &vb);
 	glBindBuffer(GL_ARRAY_BUFFER, vb);

@@ -26,7 +26,7 @@ void P3d_Object::render(glm::mat4 &proj, glm::mat4 view) {
 	glm::vec4 ambientLight(1.0, 1.0, 1.0, 1.0);
 	GLuint uniAmbient = glGetUniformLocation(shader_program, "ambientLight");
 	glUniform4f(uniAmbient, ambientLight[0], ambientLight[1], ambientLight[2], ambientLight[3]);
-	float ambientLightIntensity = 0.1;
+	float ambientLightIntensity = 0.2;
 	GLuint uniAmbientIntensity = glGetUniformLocation(shader_program, "ambientLightIntensity");
 	glUniform1f(uniAmbientIntensity, ambientLightIntensity);
 
@@ -40,17 +40,35 @@ void P3d_Object::render(glm::mat4 &proj, glm::mat4 view) {
 	GLuint uniDirLightDirection = glGetUniformLocation(shader_program, "dirLightDirection");
 	glUniform3f(uniDirLightDirection, dirLightDirection.x, dirLightDirection.y, dirLightDirection.z);
 
-	//point light
-	glm::vec4 pointLightPosition(0.0, -2.0, 1.5, 1.0);
-	glm::vec4 pointLightColor(1.0, 1.0, 1.0, 1.0);
-	pointLightPosition = pointLightPosition - glm::vec4(position, 1.0);
-	pointLightPosition = pointLightPosition * glm::mat4_cast(rotation);
-	//print_vec4(pointLightPosition);
+	//point lights
+	int nPointLights = 2;
 
+	glm::vec4 pointLightPosition[nPointLights];
+	glm::vec4 pointLightColor[nPointLights];
+	float fv_pointLightPosition[nPointLights * 4];
+	float fv_pointLightColor[nPointLights * 4];
+
+	pointLightPosition[0] = glm::vec4(0.0, -2.0, 1.5, 1.0);
+	pointLightColor[0] = glm::vec4(1.0, 1.0, 1.0, 1.0);
+	pointLightPosition[1] = glm::vec4(0.0, 1.5, -1.0, 1.0);
+	pointLightColor[1] = glm::vec4(1.0, 1.0, 1.0, 1.0);
+
+	for(int i=0; i!=nPointLights; i++) {
+		pointLightPosition[i] = pointLightPosition[i] - glm::vec4(position, 1.0);
+		pointLightPosition[i] = pointLightPosition[i] * glm::mat4_cast(rotation);
+		//print_vec4(pointLightPosition);
+		for(int j=0; j!=4; j++) {
+			fv_pointLightPosition[i*4 + j] = pointLightPosition[i][j];
+			fv_pointLightColor[i*4 + j] = pointLightColor[i][j];
+		}
+	}
+
+	GLuint uniNPointLight = glGetUniformLocation(shader_program, "nPointLight");
+	glUniform1i(uniNPointLight, nPointLights);
 	GLuint uniPointLightPos = glGetUniformLocation(shader_program, "pointLightPos");
-	glUniform4f(uniPointLightPos, pointLightPosition.x, pointLightPosition.y, pointLightPosition.z, pointLightPosition[3]);
+	glUniform4fv(uniPointLightPos, nPointLights, fv_pointLightPosition);
 	GLuint uniPointLightColor = glGetUniformLocation(shader_program, "pointLightColor");
-	glUniform4f(uniPointLightColor, pointLightColor.r, pointLightColor.g, pointLightColor.b, pointLightColor.a);
+	glUniform4fv(uniPointLightColor, nPointLights, fv_pointLightColor);
 
 
 	if(mesh != NULL)

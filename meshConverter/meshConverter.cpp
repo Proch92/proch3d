@@ -10,6 +10,7 @@
 
 void print_vec3(const glm::vec3 &);
 void print_mesh(struct _mesh*);
+bool vequal(struct vertex*, struct vertex*);
 
 struct vertex {
 	glm::vec3 v;
@@ -105,49 +106,32 @@ int main(int argc, char **argv)
 
 			//calculating face normal
 			meshes[i].faces[j].face_normal = glm::triangleNormal(meshes[i].faces[j].v[0]->v, meshes[i].faces[j].v[1]->v, meshes[i].faces[j].v[2]->v);
-			printf("calculating face normal\n");
+			/*printf("calculating face normal\n");
 			print_vec3(meshes[i].faces[j].v[0]->v);
 			print_vec3(meshes[i].faces[j].v[1]->v);
 			print_vec3(meshes[i].faces[j].v[2]->v);
-			printf("n:"); print_vec3(meshes[i].faces[j].face_normal);
+			printf("n:"); print_vec3(meshes[i].faces[j].face_normal);*/
 		}
 
 		//generating vertex normals
-		for(j=0; j!=meshes[i].num_faces; j++) {
-			struct face &f = meshes[i].faces[j];
+		for(j=0; j!=meshes[i].num_vertices; j++) {
+			struct vertex *actual_vertex = &meshes[i].vertices[j];
+			actual_vertex->normal = glm::vec3(0.0, 0.0, 0.0);
 
-			int k;
-			for(k=0; k!=3; k++) {
-				if(f.v[k]->normal == glm::vec3(0.0, 0.0, 0.0)) {
-					glm::vec3 n = f.face_normal;
-					int nfound = 0;
-					int ifound[100];
-					//searching for adiacent faces
-					int z;
-					for(z=0; z!=meshes[i].num_faces && z!=j; z++) {
-						struct face &f2 = meshes[i].faces[z];
+			for(int k=0; k!=meshes[i].num_faces; k++) {
+				struct face *match_face = &meshes[i].faces[k];
+				for(int h=0; h!=3; h++) {
+					struct vertex *match_vertex = match_face->v[h];
 
-						int y;
-						for(y=0; y!=3; y++)
-							if(f2.v[y]->v == f.v[k]->v) {
-								n += f2.face_normal;
-
-								ifound[nfound] = f2.index[y];
-								nfound++;
-							}
-					}
-					if(nfound > 100) printf("!!!!!!!!!!! nfound > 100 (%d) !!!!!!!!!!!!!!\n", nfound);
-					else printf("%d\n", nfound);
-					n = glm::normalize(n);
-
-					f.v[k]->normal = n;
-					for(z=0; z!=nfound; z++)
-						meshes[i].vertices[ifound[z]].normal = n;
+					if(vequal(actual_vertex, match_vertex))
+						actual_vertex->normal += match_face->face_normal;
 				}
 			}
+
+			actual_vertex->normal = glm::normalize(actual_vertex->normal);
 		}
 	}
-	print_mesh(meshes);
+	//print_mesh(meshes);
 
 	//export to p3d file
 
@@ -245,6 +229,10 @@ void print_mesh(struct _mesh* meshes) {
 			printf("face normal: "); print_vec3(meshes[i].faces[j].face_normal);
 		}
 	}
+}
+
+bool vequal(struct vertex* a, struct vertex* b) {
+	return (a->v.x == b->v.x && a->v.y == b->v.y && a->v.z == b->v.z);
 }
 
 /*

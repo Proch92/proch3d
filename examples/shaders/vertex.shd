@@ -4,18 +4,21 @@ in vec3 inPosition;
 in vec3 inNormal;
 
 out vec3 Normal;
-out vec3 toPointLight;
+out vec3 toPointLight[10];
 
 uniform mat4 view;
 uniform mat4 proj;
 uniform mat4 model;
 uniform mat4 rot;
 
-uniform vec4 pointLightPos;
+uniform int nPointLight;
+uniform vec4 pointLightPos[10];
 
 void main() {
 	gl_Position = proj * view * model * vec4(inPosition, 1.0);
 
 	Normal = inNormal;
-	toPointLight = normalize(vec3(pointLightPos.x, pointLightPos.y, pointLightPos.z) - inPosition);
+
+	for(int i=0; i!=nPointLight; i++)
+		toPointLight[i] = normalize(vec3(pointLightPos[i].x, pointLightPos[i].y, pointLightPos[i].z) - inPosition);
 }

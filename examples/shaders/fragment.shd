@@ -2,7 +2,7 @@
 
 in vec3 Normal;
 
-in vec3 toPointLight;
+in vec3 toPointLight[10];
 
 out vec4 outColor;
 
@@ -12,14 +12,17 @@ uniform float ambientLightIntensity;
 uniform vec4 dirLightColor;
 uniform vec3 dirLightDirection;
 
-uniform vec4 pointLightColor;
+uniform int nPointLight;
+uniform vec4 pointLightColor[10];
 
 void main() {
 	vec4 ambLight = ambientLightIntensity * ambientLight;
 	vec4 dirLight = dirLightColor * clamp(dot(Normal, dirLightDirection), 0.0, 1.0);
-	vec4 pointLight = pointLightColor * clamp(dot(Normal, toPointLight), 0.0, 1.0);
+	vec4 pointLights = vec4(0.0);
+	for(int i=0; i!=nPointLight; i++)
+		pointLights += pointLightColor[i] * clamp(dot(Normal, toPointLight[i]), 0.0, 1.0);
 
-	vec4 lightIntensity = clamp(ambLight + dirLight + pointLight, 0.0, 1.0);
+	vec4 lightIntensity = clamp(ambLight + dirLight + pointLights, 0.0, 1.0);
 
 	outColor = vec4(0.8, 0.2, 0.2, 1.0) * lightIntensity;
 }
