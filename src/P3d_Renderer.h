@@ -10,6 +10,7 @@ class P3d_Renderer {
 		void set_max_fps(int);
 		void set_current_camera(P3d_Camera*);
 		void set_current_window(sf::RenderWindow*);
+		void set_post_process(bool);
 		void show_xyz_axis(bool);
 		void show_debug_text(string, int, int);
 	private:
@@ -26,6 +27,7 @@ class P3d_Renderer {
 		int max_fps;
 		
 		bool showing_axis;
+		bool post_process;
 };
 
 #define DEBUG_TEXT_SIZE 10

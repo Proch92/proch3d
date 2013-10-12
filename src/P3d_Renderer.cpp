@@ -13,6 +13,8 @@ P3d_Renderer::P3d_Renderer() {
 	max_fps = 0;
 	
 	showing_axis = false;
+
+	post_process = false;
 }
 
 void P3d_Renderer::update_screen() {
@@ -58,6 +60,10 @@ void P3d_Renderer::set_current_window(sf::RenderWindow* w) {
 
 void P3d_Renderer::show_xyz_axis(bool value) {
 	showing_axis = value;
+}
+
+void P3d_Renderer::set_post_process(bool value) {
+	post_process = value;
 }
 
 void P3d_Renderer::show_axis() {

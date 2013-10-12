@@ -3,9 +3,10 @@
 P3d_Object::P3d_Object() {
 	hidden = false;
 	mesh = NULL;
+	num_meshes = 0;
 }
 
-void P3d_Object::render(glm::mat4 &proj, glm::mat4 view) {
+void P3d_Object::render(glm::mat4 &proj, glm::mat4 view, glm::vec3 cameraPos) {
 	if(hidden) return;
 
 	update_model_matrix();
@@ -19,14 +20,15 @@ void P3d_Object::render(glm::mat4 &proj, glm::mat4 view) {
 	GLuint uniModel = glGetUniformLocation(shader_program, "model");
 	glUniformMatrix4fv(uniModel, 1, GL_FALSE, glm::value_ptr(modelMatrix));
 
-	GLuint uniRot = glGetUniformLocation(shader_program, "rot");
-	glUniformMatrix4fv(uniModel, 1, GL_FALSE, glm::value_ptr(glm::mat4_cast(rotation)));
+	//camera position
+	GLuint uniCamera = glGetUniformLocation(shader_program, "cameraPos");
+	glUniform3f(uniCamera, -cameraPos.x, -cameraPos.y, -cameraPos.z);
 
 	//ambient light
 	glm::vec4 ambientLight(1.0, 1.0, 1.0, 1.0);
 	GLuint uniAmbient = glGetUniformLocation(shader_program, "ambientLight");
 	glUniform4f(uniAmbient, ambientLight[0], ambientLight[1], ambientLight[2], ambientLight[3]);
-	float ambientLightIntensity = 0.2;
+	float ambientLightIntensity = 0.3;
 	GLuint uniAmbientIntensity = glGetUniformLocation(shader_program, "ambientLightIntensity");
 	glUniform1f(uniAmbientIntensity, ambientLightIntensity);
 
@@ -47,11 +49,12 @@ void P3d_Object::render(glm::mat4 &proj, glm::mat4 view) {
 	glm::vec4 pointLightColor[nPointLights];
 	float fv_pointLightPosition[nPointLights * 4];
 	float fv_pointLightColor[nPointLights * 4];
+	float pointLightAttenuation[nPointLights];
 
-	pointLightPosition[0] = glm::vec4(0.0, -2.0, 1.5, 1.0);
+	pointLightPosition[0] = glm::vec4(0.0, -15.0, 1.5, 1.0);
 	pointLightColor[0] = glm::vec4(1.0, 1.0, 1.0, 1.0);
-	pointLightPosition[1] = glm::vec4(0.0, 1.5, -1.0, 1.0);
-	pointLightColor[1] = glm::vec4(1.0, 1.0, 1.0, 1.0);
+	pointLightPosition[1] = glm::vec4(0.0, 1.5, 1.0, 1.0);
+	pointLightColor[1] = glm::vec4(0.0, 0.0, 1.0, 1.0);
 
 	for(int i=0; i!=nPointLights; i++) {
 		pointLightPosition[i] = pointLightPosition[i] - glm::vec4(position, 1.0);
@@ -61,6 +64,8 @@ void P3d_Object::render(glm::mat4 &proj, glm::mat4 view) {
 			fv_pointLightPosition[i*4 + j] = pointLightPosition[i][j];
 			fv_pointLightColor[i*4 + j] = pointLightColor[i][j];
 		}
+
+		pointLightAttenuation[i] = 25.0;
 	}
 
 	GLuint uniNPointLight = glGetUniformLocation(shader_program, "nPointLight");
@@ -69,6 +74,8 @@ void P3d_Object::render(glm::mat4 &proj, glm::mat4 view) {
 	glUniform4fv(uniPointLightPos, nPointLights, fv_pointLightPosition);
 	GLuint uniPointLightColor = glGetUniformLocation(shader_program, "pointLightColor");
 	glUniform4fv(uniPointLightColor, nPointLights, fv_pointLightColor);
+	GLuint uniPointLightCAttenuation = glGetUniformLocation(shader_program, "pointLightAttenuation");
+	glUniform1fv(uniPointLightCAttenuation, nPointLights, pointLightAttenuation);
 
 
 	if(mesh != NULL)
@@ -82,192 +89,3 @@ void P3d_Object::set_mesh(P3d_Mesh* m) {
 void P3d_Object::set_shader_program(GLuint sp) {
 	shader_program = sp;
 }
-
-/*void P3d_Object::load_cube(int n) {
-	num_vertices = 8;
-	float n2 = (float)n / 2;
-	vertices = new float[24] {
-		-n2, -n2, -n2,
-		n2, -n2, -n2,
-		n2, -n2, n2,
-		-n2, -n2, n2,
-
-		-n2, n2, -n2,
-		n2, n2, -n2,
-		n2, n2, n2,
-		-n2, n2, n2
-	};
-
-	texcoords = new float[72] {
-		0.0, 0.0,
-		0.0, 1.0,
-		1.0, 1.0,
-		1.0, 1.0,
-		1.0, 0.0,
-		0.0, 0.0
-	};
-	int i;
-	for(i=2; i!=7; i++)
-		memcpy(&(texcoords[i*12]), texcoords, 12*sizeof(float));
-
-	indices = new int[36] {
-		0,1,2,
-		2,3,0,
-
-		4,5,6,
-		6,7,4,
-
-		3,7,6,
-		6,2,3,
-
-		0,4,7,
-		7,3,0,
-
-		1,5,4,
-		4,0,1,
-
-		2,6,5,
-		5,1,2
-	};
-	num_indices = 36;
-
-	colors = new float[32] {
-		1.0, 0.0, 0.0, 1.0,
-		1.0, 0.0, 0.0, 1.0,
-		1.0, 0.0, 0.0, 1.0,
-		1.0, 0.0, 0.0, 1.0,
-
-		1.0, 0.0, 0.0, 1.0,
-		1.0, 0.0, 0.0, 1.0,
-		1.0, 0.0, 0.0, 1.0,
-		1.0, 0.0, 0.0, 1.0
-	};
-
-	//creating gpu memory buffers
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
-	glGenBuffers(1, &vb);
-	glBindBuffer(GL_ARRAY_BUFFER, vb);
-	glBufferData(GL_ARRAY_BUFFER, num_vertices * 3 * sizeof(float), vertices, GL_STATIC_DRAW);
-
-	glGenBuffers(1, &ib);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, num_indices * 2 * sizeof(int), indices, GL_STATIC_DRAW);
-
-	glGenBuffers(1, &cb);
-	glBindBuffer(GL_ARRAY_BUFFER, cb);
-	glBufferData(GL_ARRAY_BUFFER, num_vertices * 4 * sizeof(float), colors, GL_STATIC_DRAW);
-}
-
-void P3d_Object::load_tetrahedron() {
-	num_vertices = 4;
-	vertices = new float[12] {
-		0, 0, 0,
-		0.5, sqrtf(3)/2, 0,
-		1.0, 0.0, 0.0,
-		0.5, 1.0/3.0, sqrtf(2.0/3.0)
-	};
-
-	texcoords = new float[24] {
-		0, 0,
-		0.5, sqrtf(3)/2,
-		1.0, 0.0
-	};
-	int i;
-	for(i=2; i!=5; i++)
-		memcpy(&(texcoords[i*6]), texcoords, 6*sizeof(float));
-
-	indices = new int[12] {
-		0, 2, 1,
-		0, 3, 2,
-		2, 3, 1,
-		1, 3, 0
-	};
-	num_indices = 12;
-
-	colors = new float[16] {
-		1.0, 0.0, 0.0, 1.0,
-		0.0, 1.0, 0.0, 1.0,
-		1.0, 0.0, 1.0, 1.0,
-		0.0, 0.0, 0.0, 1.0
-	};
-
-	//creating gpu memory buffers
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
-	glGenBuffers(1, &vb);
-	glBindBuffer(GL_ARRAY_BUFFER, vb);
-	glBufferData(GL_ARRAY_BUFFER, num_vertices * 3 * sizeof(float), vertices, GL_STATIC_DRAW);
-
-	glGenBuffers(1, &ib);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, num_indices * 2 * sizeof(int), indices, GL_STATIC_DRAW);
-
-	glGenBuffers(1, &cb);
-	glBindBuffer(GL_ARRAY_BUFFER, cb);
-	glBufferData(GL_ARRAY_BUFFER, num_vertices * 4 * sizeof(float), colors, GL_STATIC_DRAW);
-}
-
-void P3d_Object::load_doublepiramid() {
-	num_vertices = 6;
-	vertices = new float[18] {
-		-0.5, -0.5, 0.0,
-		-0.5, 0.5, 0.0,
-		0.5, 0.5, 0.0,
-		0.5, -0.5, 0.0,
-		0.0, 0.0, 1.6,
-		0.0, 0.0, -1.6
-	};
-
-	texcoords = new float[24] {
-		0, 0,
-		0.5, sqrtf(3)/2,
-		1.0, 0.0
-	};
-	int i;
-	for(i=2; i!=5; i++)
-		memcpy(&(texcoords[i*6]), texcoords, 6*sizeof(float));
-
-	indices = new int[24] {
-		0, 4, 3,
-		3, 4, 2,
-		2, 4, 1,
-		1, 4, 0,
-
-		0, 3, 5,
-		3, 2, 5,
-		2, 1, 5,
-		1, 0, 5
-	};
-	num_indices = 24;
-
-	colors = new float[24] {
-		1.0, 0.0, 0.0, 1.0,
-		0.0, 1.0, 0.0, 1.0,
-		1.0, 0.0, 1.0, 1.0,
-		1.0, 0.0, 1.0, 1.0,
-		0.0, 0.0, 0.0, 1.0,
-		0.0, 0.0, 0.0, 1.0,
-	};
-
-	//creating gpu memory buffers
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
-	glGenBuffers(1, &vb);
-	glBindBuffer(GL_ARRAY_BUFFER, vb);
-	glBufferData(GL_ARRAY_BUFFER, num_vertices * 3 * sizeof(float), vertices, GL_STATIC_DRAW);
-
-	glGenBuffers(1, &ib);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, num_indices * 2 * sizeof(int), indices, GL_STATIC_DRAW);
-
-	glGenBuffers(1, &cb);
-	glBindBuffer(GL_ARRAY_BUFFER, cb);
-	glBufferData(GL_ARRAY_BUFFER, num_vertices * 4 * sizeof(float), colors, GL_STATIC_DRAW);
-}
-
-void P3d_Object::load_test() {
-}*/

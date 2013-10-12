@@ -14,7 +14,7 @@ bool vequal(struct vertex*, struct vertex*);
 
 struct vertex {
 	glm::vec3 v;
-	glm::vec2 texcoord;
+	glm::vec2 UV;
 	glm::vec3 normal;
 };
 
@@ -43,7 +43,7 @@ int main(int argc, char **argv)
 	printf("loading %s\n", filename);
 	Assimp::Importer importer;
 
-	const aiScene* scene = importer.ReadFile(filename, aiProcess_Triangulate);
+	const aiScene* scene = importer.ReadFile(filename, aiProcess_Triangulate | aiProcess_JoinIdenticalVertices);
 	if(scene == NULL) {
 		printf("failed loading %s\n", filename);
 		return false;
@@ -77,9 +77,9 @@ int main(int argc, char **argv)
 			meshes[i].vertices[j].v = glm::vec3(mesh->mVertices[j].x, mesh->mVertices[j].y, mesh->mVertices[j].z);
 			
 			if(has_tex)
-				meshes[i].vertices[j].texcoord = glm::vec2(mesh->mTextureCoords[0][j].x, mesh->mTextureCoords[0][j].y);
+				meshes[i].vertices[j].UV = glm::vec2(mesh->mTextureCoords[0][j].x, mesh->mTextureCoords[0][j].y);
 			else
-				meshes[i].vertices[j].texcoord = glm::vec2(0.0, 0.0);
+				meshes[i].vertices[j].UV = glm::vec2(0.0, 0.0);
 		}
 
 		meshes[i].num_faces = mesh->mNumFaces;
@@ -106,11 +106,6 @@ int main(int argc, char **argv)
 
 			//calculating face normal
 			meshes[i].faces[j].face_normal = glm::triangleNormal(meshes[i].faces[j].v[0]->v, meshes[i].faces[j].v[1]->v, meshes[i].faces[j].v[2]->v);
-			/*printf("calculating face normal\n");
-			print_vec3(meshes[i].faces[j].v[0]->v);
-			print_vec3(meshes[i].faces[j].v[1]->v);
-			print_vec3(meshes[i].faces[j].v[2]->v);
-			printf("n:"); print_vec3(meshes[i].faces[j].face_normal);*/
 		}
 
 		//generating vertex normals
@@ -146,7 +141,11 @@ int main(int argc, char **argv)
 	for(i=0; i!=num_meshes; i++) {
 		fwrite(&meshes[i].num_vertices, sizeof(int), 1, out); //num_vertices
 
+		printf("%d\n", meshes[i].num_faces);
+		fwrite(&meshes[i].num_faces, sizeof(int), 1, out); //num_faces
+
 		float* fbuffer = (float*) malloc(sizeof(float) * 3 * meshes[i].num_vertices);
+		
 		int fi = 0;
 
 		int j;
@@ -166,13 +165,11 @@ int main(int argc, char **argv)
 		fwrite(fbuffer, sizeof(float), meshes[i].num_vertices * 3, out);
 
 		fi = 0;
-		for(j=0; j!=meshes[i].num_vertices; j++) { //texture coordinate
-			fbuffer[fi++] = meshes[i].vertices[j].texcoord.x;
-			fbuffer[fi++] = meshes[i].vertices[j].texcoord.y;
+		for(j=0; j!=meshes[i].num_vertices; j++) { //UV coordinate
+			fbuffer[fi++] = meshes[i].vertices[j].UV.x;
+			fbuffer[fi++] = meshes[i].vertices[j].UV.y;
 		}
 		fwrite(fbuffer, sizeof(float), meshes[i].num_vertices * 2, out);
-
-		fwrite(&meshes[i].num_faces, sizeof(int), 1, out); //num_faces
 
 		int* ibuffer = (int*) malloc(sizeof(int) * meshes[i].num_indices);
 		int ii = 0;
@@ -240,6 +237,9 @@ bool vequal(struct vertex* a, struct vertex* b) {
 num_meshes (int)
 	num_vertices (int)
 
+	num_faces (int)
+
+	//vertex attributes
 	v1.x, v1.y, v1.z //vertices (3 float)
 	...
 	vn.x, vn.y, vn.z
@@ -248,11 +248,11 @@ num_meshes (int)
 	...
 	nn.x, nn.y, nn.z
 
-	t1.x, t1.y //texture coordinates (2 float)
+	t1.x, t1.y //UV coordinates (2 float)
 	...
 	tn.x, tn.y
-
-	num_faces (int)
+	
+	//face attributes
 	i1, i2, i3 ... in //face indices (int)
 
 	fn1.x, fn1.y, fn1.z //face normal (3 float)
